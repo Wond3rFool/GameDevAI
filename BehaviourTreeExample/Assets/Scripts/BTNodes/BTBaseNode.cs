@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum TaskStatus { Success, Failed, Running }
-public abstract class BTBaseNode
+public class BTBaseNode : Node
 {
-    public abstract TaskStatus Run();
+    
+    
 }

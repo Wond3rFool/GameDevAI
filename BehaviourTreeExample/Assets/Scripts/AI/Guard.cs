@@ -4,38 +4,31 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Guard : MonoBehaviour
+public class Guard : Tree
 {
-    private BTBaseNode tree;
-    private NavMeshAgent agent;
-    private Animator animator;
+    public Transform[] waypoints;
 
-    private void Awake()
+    public static float speed = 2f;
+    public static float fovRange = 5f;
+    public static float attackRange = 1f;
+
+    protected override Node SetupTree()
     {
-        agent = GetComponent<NavMeshAgent>();
-        animator = GetComponentInChildren<Animator>();
+        Node root = new Selector(new List<Node>
+        {
+            new Sequence(new List<Node>
+            {
+                new CheckAttackRange(transform),
+                new Attack(transform),
+            }),
+            new Sequence(new List<Node>
+            {
+                new CheckFOV(transform),
+                new ToTarget(transform),
+            }),
+            new Patrol(transform, waypoints),
+        }); ; ;
+
+        return root;
     }
-
-    private void Start()
-    {
-        //Create your Behaviour Tree here!
-    }
-
-    private void FixedUpdate()
-    {
-        tree?.Run();
-    }
-
-    //private void OnDrawGizmos()
-    //{
-    //    Gizmos.color = Color.yellow;
-    //    Handles.color = Color.yellow;
-    //    Vector3 endPointLeft = viewTransform.position + (Quaternion.Euler(0, -ViewAngleInDegrees.Value, 0) * viewTransform.transform.forward).normalized * SightRange.Value;
-    //    Vector3 endPointRight = viewTransform.position + (Quaternion.Euler(0, ViewAngleInDegrees.Value, 0) * viewTransform.transform.forward).normalized * SightRange.Value;
-
-    //    Handles.DrawWireArc(viewTransform.position, Vector3.up, Quaternion.Euler(0, -ViewAngleInDegrees.Value, 0) * viewTransform.transform.forward, ViewAngleInDegrees.Value * 2, SightRange.Value);
-    //    Gizmos.DrawLine(viewTransform.position, endPointLeft);
-    //    Gizmos.DrawLine(viewTransform.position, endPointRight);
-
-    //}
 }
