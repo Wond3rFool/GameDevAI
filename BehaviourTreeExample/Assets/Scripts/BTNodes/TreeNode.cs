@@ -4,28 +4,28 @@ using UnityEngine;
 
 
 public enum TaskStatus { Success, Failed, Running }
-public class Node
+public class TreeNode
 {
-    public Node parent;
+    public TreeNode parent;
     protected TaskStatus status;
-    protected List<Node> children = new List<Node>();
+    protected List<TreeNode> children = new List<TreeNode>();
 
     private Dictionary<string, object> dataContext = new Dictionary<string, object>();
 
-    public Node()
+    public TreeNode()
     {
         parent = null;
     }
 
-    public Node(List<Node> children)
+    public TreeNode(List<TreeNode> children)
     {
-        foreach (Node child in children)
+        foreach (TreeNode child in children)
         {
             _Attach(child);
         }
     }
 
-    private void _Attach(Node node)
+    private void _Attach(TreeNode node)
     {
         node.parent = this;
         children.Add(node);
@@ -44,7 +44,7 @@ public class Node
         if (dataContext.TryGetValue(key, out value))
             return value;
 
-        Node node = parent;
+        TreeNode node = parent;
         while (node != null)
         {
             value = node.GetData(key);
@@ -65,7 +65,7 @@ public class Node
             return true;
         }
 
-        Node node = parent;
+        TreeNode node = parent;
         while (node != null)
         {
             bool cleared = node.ClearData(key);

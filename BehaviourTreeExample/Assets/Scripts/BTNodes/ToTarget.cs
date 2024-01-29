@@ -2,19 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using TMPro;
 
-public class ToTarget : Node
+public class ToTarget : TreeNode
 {
     private Transform transform;
     private Animator animator;
-    private Vector3 lastKnownPosition;
-    private float cooldown = 2f;
     private NavMeshAgent agent;
-    public ToTarget(Transform _transform) 
+    private TextMeshPro text;
+    public ToTarget(Transform _transform, TextMeshPro _text) 
     {
         transform = _transform;
         animator = transform.GetComponentInChildren<Animator>();
         agent = transform.GetComponent<NavMeshAgent>();
+        text = _text;
+        
     }
 
     public override TaskStatus Evaluate()
@@ -30,32 +32,27 @@ public class ToTarget : Node
                 if (Vector3.Distance(transform.position, target.position) > 0.01f)
                 {
                     animator.Play("Rifle Walk");
-                    lastKnownPosition = target.position;
                     agent.SetDestination(target.position);
                     transform.LookAt(target.position);
+                    text.text = "Player in sight";
+                    Debug.Log(text.text);
+                    return TaskStatus.Running;
+                }
+                else 
+                {
+                    return TaskStatus.Success;
                 }
             }
-            else if(lastKnownPosition != Vector3.zero)
+            else 
             {
-                agent.SetDestination(lastKnownPosition);
-                transform.LookAt(lastKnownPosition);
-                if (Vector3.Distance(transform.position, lastKnownPosition) < 0.03f) 
-                {
-                    ClearData("Target");
-                    cooldown -= Time.deltaTime;
-                    animator.Play("Idle");
-                    if (cooldown <= 0)
-                    {
-                        lastKnownPosition = Vector3.zero;
-                        cooldown = 2f;
-                        status = TaskStatus.Failed;
-                        return status;
-                    }
-                }
+                ClearData("Target");
+                status = TaskStatus.Failed;
+                return status;
             }
         }
-        status = TaskStatus.Running;
-        return status;
+        return TaskStatus.Failed;
     }
-
 }
+
+
+

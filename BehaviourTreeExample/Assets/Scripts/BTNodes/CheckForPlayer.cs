@@ -2,13 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CheckFOV : Node
+public class CheckForPlayer : TreeNode
 {
     private static int playerLayerMask = 1 << 6;
 
     private Transform transform;
 
-    public CheckFOV(Transform _transform)
+    public CheckForPlayer(Transform _transform)
     {
         transform = _transform;
     }

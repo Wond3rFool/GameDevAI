@@ -4,7 +4,7 @@ using UnityEngine;
 
 public abstract class Tree : MonoBehaviour
 {
-    private Node root = null;
+    private TreeNode root = null;
     protected void Start()
     {
         root = SetupTree();
@@ -18,5 +18,5 @@ public abstract class Tree : MonoBehaviour
             root.Evaluate();
         }
     }
-    protected abstract Node SetupTree();
+    protected abstract TreeNode SetupTree();
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class FollowPlayer : Node
+public class FollowPlayer : TreeNode
 {
     private Transform transform;
     private Animator animator;

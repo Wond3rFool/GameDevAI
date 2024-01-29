@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CheckAttackRange : Node
+public class CheckAttackRange : TreeNode
 {
     private static int playerLayerMask = 1 << 6;
 
@@ -20,19 +20,16 @@ public class CheckAttackRange : Node
         object t = GetData("Target");
         if (t == null) 
         {
-            status = TaskStatus.Failed;
-            return status;
-            
+            return TaskStatus.Failed;
         }
         Transform target = (Transform)t;
         if (Vector3.Distance(transform.position, target.position) <= Guard.attackRange) 
         {
             animator.Play("Kick");
-            status = TaskStatus.Success;
-            return status;
+            return TaskStatus.Success;
         }
 
-        status = TaskStatus.Failed;
-        return status;
+        
+        return TaskStatus.Failed;
     }
 }

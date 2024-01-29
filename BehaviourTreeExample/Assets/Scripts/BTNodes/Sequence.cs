@@ -2,33 +2,38 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Sequence : Node
+public class Sequence : TreeNode
 {
-    public Sequence() : base(){}
-    public Sequence(List<Node> children) : base(children) { }
+    public Sequence(List<TreeNode> children) : base(children) { }
 
     public override TaskStatus Evaluate()
     {
-        bool anyChildRunning = false;
-        foreach (Node child in children) 
+        // Keep track of the index of the child node being evaluated
+        int currentChildIndex = 0;
+
+        // Keep evaluating child nodes until all have succeeded or one fails
+        while (currentChildIndex < children.Count)
         {
-            switch (child.Evaluate()) 
+            TaskStatus childStatus = children[currentChildIndex].Evaluate();
+
+            // If the child succeeded, move on to the next child
+            if (childStatus == TaskStatus.Success)
             {
-                case TaskStatus.Failed:
-                    status = TaskStatus.Failed;
-                    return status;
-                case TaskStatus.Success:
-                    continue;
-                case TaskStatus.Running:
-                    anyChildRunning = true;
-                    continue;
-                default:
-                    status = TaskStatus.Success;
-                    return status;
+                currentChildIndex++;
+            }
+            // If the child is still running, continue evaluating it
+            else if (childStatus == TaskStatus.Running)
+            {
+                return TaskStatus.Running;
+            }
+            // If the child fails, return failure
+            else
+            {
+                return TaskStatus.Failed;
             }
         }
 
-        status = anyChildRunning ? TaskStatus.Running : TaskStatus.Success;
-        return status;
+        // If all child nodes succeeded, return success
+        return TaskStatus.Success;
     }
 }

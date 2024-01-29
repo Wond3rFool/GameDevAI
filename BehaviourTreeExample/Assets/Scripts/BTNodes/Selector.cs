@@ -1,15 +1,13 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
-public class Selector : Node
+public class Selector : TreeNode
 {
     public Selector() : base() { }
-    public Selector(List<Node> children) : base(children) { }
+    public Selector(List<TreeNode> children) : base(children) { }
 
     public override TaskStatus Evaluate()
     {
-        foreach (Node child in children)
+        foreach (TreeNode child in children)
         {
             switch (child.Evaluate())
             {
@@ -20,9 +18,8 @@ public class Selector : Node
                     return status;
                 case TaskStatus.Running:
                     status = TaskStatus.Running;
-                    return status;
-                default:
-                    continue;
+                    // Keep iterating through other children to check for additional running tasks
+                    break;
             }
         }
 
