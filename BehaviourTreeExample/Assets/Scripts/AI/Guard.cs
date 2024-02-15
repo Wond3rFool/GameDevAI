@@ -16,40 +16,36 @@ public class Guard : Tree
     public static float fovRange = 5f;
     public static float attackRange = 1f;
 
-    private bool hasWeapon = false;
-    public static bool hasVision = true;
+    public static bool hasWeapon = false;
+    public static bool hasVision = false;
 
     protected override TreeNode SetupTree()
     {
-
         TreeNode findWeapon = new Sequence(new List<TreeNode>
         {
-            new InverseCondition(HasWeapon),
-            new CheckForPlayer(transform),
-            new GrabWeapon(transform, weaponSpot, text),
-            new FunctionNode(toggleWeapon)
+            new ConditionNode(SeenPlayer),
+            new Inverter(new ConditionNode(HasWeapon)),
+            new GrabWeapon(transform, weaponSpot,text),
         });
 
-        TreeNode chasePlayer = new Parallel(new List<TreeNode>
+        TreeNode chasePlayer = new Sequence(new List<TreeNode>
         {
             new ConditionNode(HasWeapon),
-            new CheckPlayerInRange(transform),
-            new ToTarget(transform, text)
-        });
-
-        TreeNode attackPlayer = new Parallel(new List<TreeNode>
-        {
+            new ToTarget(transform, text),
             new CheckAttackRange(transform),
-            new Attack(transform, text),
+            new Attack(transform, text)
         });
 
-        TreeNode patrol = new Patrol(transform, waypoints, text);
+        TreeNode patrol = new Selector(new List<TreeNode> 
+        {
+            new CheckPlayerInRange(transform),
+            new Patrol(transform, waypoints, text)
+        });
 
         TreeNode root = new Selector(new List<TreeNode>
         {
-            attackPlayer,
-            chasePlayer,
             findWeapon,
+            chasePlayer,
             patrol
         });
 

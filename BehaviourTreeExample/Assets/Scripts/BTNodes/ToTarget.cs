@@ -29,7 +29,7 @@ public class ToTarget : TreeNode
         {
             if (hit.transform.GetComponent<Player>())
             {
-                if (Vector3.Distance(transform.position, target.position) > 0.01f)
+                if (Vector3.Distance(transform.position, target.position) > 0.4f)
                 {
                     animator.Play("Rifle Walk");
                     agent.SetDestination(target.position);

@@ -24,6 +24,7 @@ public class CheckPlayerInRange : TreeNode
             if (colliders.Length > 0)
             {
                 parent.parent.SetData("Target", colliders[0].transform);
+                Guard.hasVision = true;
                 status = TaskStatus.Success;
                 return status;
             }
@@ -31,9 +32,10 @@ public class CheckPlayerInRange : TreeNode
             return status;
         }
         Transform target = (Transform)t;
-        if (Vector3.Distance(transform.position, target.position) > Guard.fovRange) 
+        if (Vector3.Distance(transform.position, target.position) > Guard.fovRange)
         {
             parent.parent.ClearData("Target");
+            Guard.hasVision = false;
             status = TaskStatus.Failed;
             return status;
         }

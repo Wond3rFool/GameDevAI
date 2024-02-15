@@ -28,6 +28,7 @@ public class GrabWeapon : TreeNode
         {
             transform.position = target.position;
             text.text = "Found weapon";
+            Guard.hasWeapon = true;
             Debug.Log(text.text);
             return TaskStatus.Success;
         }
