@@ -46,7 +46,7 @@ public class Patrol : BTBaseNode
         {
             Transform wp = waypoints[currentWaypointIndex];
             agent.isStopped = false;
-            if (Vector3.Distance(transform.position, wp.position) < 0.05f)
+            if (Vector3.Distance(transform.position, wp.position) < 0.4f)
             {
                 transform.position = wp.position;
                 waitCounter = 0f;
