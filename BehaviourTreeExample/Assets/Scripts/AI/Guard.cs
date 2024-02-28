@@ -14,10 +14,12 @@ public class Guard : Tree
 
     public static float speed = 2f;
     public static float fovRange = 5f;
-    public static float attackRange = 1f;
+    public static float attackRange = 2f;
 
     public static bool hasWeapon = false;
     public static bool hasVision = false;
+
+    public LayerMask obstacleLayer;
 
     protected override BTBaseNode SetupTree()
     {
@@ -25,24 +27,33 @@ public class Guard : Tree
         {
             new Sequence(new List<BTBaseNode>
             {
-                new ConditionNode(SeenPlayer),
+                new Inverter(new CheckPlayerInRange(transform)),
+                new Patrol(transform, waypoints, text)
+            }),
+
+            new Sequence(new List<BTBaseNode>
+            {
+                new CheckForPlayer(transform, obstacleLayer),
                 new Inverter(new ConditionNode(HasWeapon)),
                 new GrabWeapon(transform, weaponSpot,text),
+                new FunctionNode(() => hasWeapon = true)
             }),
 
             new Sequence(new List<BTBaseNode>
             {
                 new ConditionNode(HasWeapon),
-                new ToTarget(transform, text),
-                new CheckAttackRange(transform),
-                new Attack(transform, text)
+                new Parallel(new List<BTBaseNode>
+                {
+                    new CheckForPlayer(transform, obstacleLayer),
+                    new ToTarget(transform, text),
+                    new CheckAttackRange(transform),
+                }),
+                new Attack(text)
             }),
 
             new Patrol(transform, waypoints, text)
         });
     }
-
-    private void toggleWeapon() => hasWeapon = !hasWeapon;
 
     private bool HasWeapon() => hasWeapon;
 

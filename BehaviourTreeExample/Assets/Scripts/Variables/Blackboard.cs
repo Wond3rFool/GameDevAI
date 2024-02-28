@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class Blackboard : MonoBehaviour
+public class Blackboard
 {
 	private Dictionary<string, object> data;
 

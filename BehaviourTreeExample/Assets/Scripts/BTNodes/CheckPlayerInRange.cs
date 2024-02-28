@@ -19,12 +19,11 @@ public class CheckPlayerInRange : BTBaseNode
         if (t == null)
         {
             Collider[] colliders = Physics.OverlapSphere(
-                transform.position, Guard.fovRange, playerLayerMask);
+                transform.position, 1000, playerLayerMask);
 
             if (colliders.Length > 0)
             {
                 blackboard.SetData("Target", colliders[0].transform);
-                Guard.hasVision = true;
                 state = TaskStatus.SUCCESS;
                 return state;
             }

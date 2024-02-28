@@ -1,37 +1,48 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CheckForPlayer : BTBaseNode
 {
     private static int playerLayerMask = 1 << 6;
-
+    private LayerMask obstacleLayer;
     private Transform transform;
 
-    public CheckForPlayer(Transform _transform)
+    public CheckForPlayer(Transform _transform, LayerMask obstacleLayer)
     {
+        this.obstacleLayer = obstacleLayer;
         transform = _transform;
     }
 
     public override TaskStatus Evaluate(Blackboard blackboard)
     {
         object t = blackboard.GetData<object>("Target");
-        if (t == null)
+        Transform targetTransform = (Transform)t;
+
+        if (t != null)
         {
-            Collider[] colliders = Physics.OverlapSphere(
-                transform.position, Guard.fovRange, playerLayerMask);
+            // Calculate direction to the player
+            Vector3 direction = targetTransform.position - transform.position;
 
-            if (colliders.Length > 0)
+            // Raycast to check for obstacles
+            RaycastHit[] hits;
+            hits = Physics.RaycastAll(transform.position, direction, direction.magnitude, obstacleLayer);
+
+            // Check if any obstacle is hit
+            for (int i = 0; i < hits.Length; i++)
             {
-                blackboard.SetData("Target", colliders[0].transform);
-                state = TaskStatus.SUCCESS;
-                return state;
+                if (hits[i].collider.CompareTag("Obstacle"))
+                {
+                    // Obstacle in the way
+                    Guard.hasVision = false;
+                    return TaskStatus.FAILURE;
+                }
             }
-            state = TaskStatus.FAILURE;
-            return state;
-        }
-        state = TaskStatus.SUCCESS;
-        return state;
-    }
 
+            // No obstacles, player is in line of sight
+            Guard.hasVision = true;
+            return TaskStatus.SUCCESS;
+        }
+
+        return TaskStatus.FAILURE;
+    }
 }

@@ -5,16 +5,12 @@ using TMPro;
 
 public class Attack : BTBaseNode
 {
-    private Animator animator;
-
-    private Transform lastTarget;
     private TextMeshPro text;
 
     private float attackTime = 1f;
     private float attackCounter = 0f;
-    public Attack(Transform _transform, TextMeshPro _text) 
+    public Attack(TextMeshPro _text) 
     {
-        animator =  _transform.GetComponentInChildren<Animator>();
         text = _text;
     }
 

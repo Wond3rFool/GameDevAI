@@ -4,36 +4,54 @@ using UnityEngine;
 
 public class Sequence : BTBaseNode
 {
-    public Sequence(List<BTBaseNode> children) : base(children) { }
+	SequenceState storedState;
+	public Sequence(List<BTBaseNode> children) : base(children) { }
 
-    public override TaskStatus Evaluate(Blackboard blackboard)
-    {
-        // Keep track of the index of the child node being evaluated
-        int currentChildIndex = 0;
+	public override TaskStatus Evaluate(Blackboard blackboard)
+	{
+		// If there is no stored state, start from the beginning
+		if (storedState == null)
+		{
+			int currentChildIndex = 0;
+			storedState = new SequenceState(currentChildIndex);
+		}
 
-        // Keep evaluating child nodes until all have succeeded or one fails
-        while (currentChildIndex < children.Count)
-        {
-            TaskStatus childStatus = children[currentChildIndex].Evaluate(blackboard);
+		// Continue evaluating child nodes from the stored state
+		while (storedState.currentChildIndex < children.Count)
+		{
+			TaskStatus childStatus = children[storedState.currentChildIndex].Evaluate(blackboard);
 
-            // If the child succeeded, move on to the next child
-            if (childStatus == TaskStatus.SUCCESS)
-            {
-                currentChildIndex++;
-            }
-            // If the child is still running, continue evaluating it
-            else if (childStatus == TaskStatus.RUNNING)
-            {
-                return TaskStatus.RUNNING;
-            }
-            // If the child fails, return failure
-            else
-            {
-                return TaskStatus.FAILURE;
-            }
-        }
+			// If the child is still running, return running and store the current state
+			if (childStatus == TaskStatus.RUNNING)
+			{
+				return TaskStatus.RUNNING;
+			}
+			// If the child fails, return failure and reset the stored state
+			else if (childStatus == TaskStatus.FAILURE)
+			{
+				storedState.Reset();
+				return TaskStatus.FAILURE;
+			}
 
-        // If all child nodes succeeded, return success
-        return TaskStatus.SUCCESS;
-    }
+			// Move to the next child
+			storedState.currentChildIndex++;
+		}
+
+		storedState.Reset();
+		return TaskStatus.SUCCESS;
+	}
+}
+public class SequenceState
+{
+	public int currentChildIndex;
+
+	public SequenceState(int currentChildIndex)
+	{
+		this.currentChildIndex = currentChildIndex;
+	}
+
+	public void Reset()
+	{
+		currentChildIndex = 0;
+	}
 }

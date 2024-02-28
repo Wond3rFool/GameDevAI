@@ -39,6 +39,8 @@ public class Patrol : BTBaseNode
             {
                 waiting = false;
             }
+            state = TaskStatus.SUCCESS;
+            return state;
         }
         else 
         {
@@ -50,6 +52,8 @@ public class Patrol : BTBaseNode
                 waitCounter = 0f;
                 waiting = true;
                 currentWaypointIndex = (currentWaypointIndex + 1) % waypoints.Length;
+                state = TaskStatus.SUCCESS;
+                return state;
             }
             else 
             {
@@ -58,10 +62,9 @@ public class Patrol : BTBaseNode
                 transform.LookAt(wp.position);
                 text.text = "Patrolling";
                 Debug.Log(text.text);
+                state = TaskStatus.SUCCESS;
+                return state;
             }
         }
-
-        state = TaskStatus.RUNNING;
-        return state;
     }
 }
