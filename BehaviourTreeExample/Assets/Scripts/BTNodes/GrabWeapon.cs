@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class GrabWeapon : TreeNode
+public class GrabWeapon : BTBaseNode
 {
     private Transform transform;
     private Transform target;
@@ -22,7 +22,7 @@ public class GrabWeapon : TreeNode
         agent = transform.GetComponent<NavMeshAgent>();
     }
 
-    public override TaskStatus Evaluate()
+    public override TaskStatus Evaluate(Blackboard blackboard)
     {
         if (Vector3.Distance(transform.position, target.position) < 2.5f)
         {
@@ -30,7 +30,7 @@ public class GrabWeapon : TreeNode
             text.text = "Found weapon";
             Guard.hasWeapon = true;
             Debug.Log(text.text);
-            return TaskStatus.Success;
+            return TaskStatus.SUCCESS;
         }
         else
         {
@@ -39,7 +39,7 @@ public class GrabWeapon : TreeNode
             transform.LookAt(target.position);
             text.text = "Finding Weapon";
             Debug.Log(text.text);
-            return TaskStatus.Running;
+            return TaskStatus.RUNNING;
         }
     }
 }

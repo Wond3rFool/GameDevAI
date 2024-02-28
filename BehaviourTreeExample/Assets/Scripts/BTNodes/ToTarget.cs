@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using TMPro;
 
-public class ToTarget : TreeNode
+public class ToTarget : BTBaseNode
 {
     private Transform transform;
     private Animator animator;
@@ -19,9 +19,9 @@ public class ToTarget : TreeNode
         
     }
 
-    public override TaskStatus Evaluate()
+    public override TaskStatus Evaluate(Blackboard blackboard)
     {
-        Transform target = (Transform)(GetData("Target"));
+        Transform target = blackboard.GetData<Transform>("Target");
         Vector3 dir = target.transform.position - transform.position;
         RaycastHit hit;
 
@@ -36,21 +36,21 @@ public class ToTarget : TreeNode
                     transform.LookAt(target.position);
                     text.text = "Player in sight";
                     Debug.Log(text.text);
-                    return TaskStatus.Running;
+                    return TaskStatus.RUNNING;
                 }
                 else 
                 {
-                    return TaskStatus.Success;
+                    return TaskStatus.SUCCESS;
                 }
             }
             else 
             {
-                ClearData("Target");
-                status = TaskStatus.Failed;
-                return status;
+                blackboard.RemoveData("Target");
+                state = TaskStatus.FAILURE;
+                return state;
             }
         }
-        return TaskStatus.Failed;
+        return TaskStatus.FAILURE;
     }
 }
 

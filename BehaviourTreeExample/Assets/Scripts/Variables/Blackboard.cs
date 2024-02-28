@@ -4,33 +4,46 @@ using UnityEngine;
 
 public class Blackboard : MonoBehaviour
 {
-    [SerializeReference] public List<BaseScriptableObject> baseSharedVariables = new List<BaseScriptableObject>();
+	private Dictionary<string, object> data;
 
-    private Dictionary<string, object> dictionary = new Dictionary<string, object>();
+	public Blackboard()
+	{
+		data = new Dictionary<string, object>();
+	}
 
-    public T GetVariable<T>(string name) where T : BaseScriptableObject
-    {
-        if (dictionary.ContainsKey(name))
-        {
-            return dictionary[name] as T;
-        }
-        return null;
-    }
+	public bool HasData(string key)
+	{
+		if (data.ContainsKey(key))
+		{
+			return true;
+		}
+		return false;
+	}
 
-    public void AddVariable(string name, BaseScriptableObject variable)
-    {
-        dictionary.Add(name, variable);
-    }
+	public T GetData<T>(string key)
+	{
+		if (data.TryGetValue(key, out object value))
+		{
+			return (T)value;
+		}
+		return default;
+	}
 
-    [ContextMenu("Add FloatVariable")]
-    public void AddFloatVariable()
-    {
-        baseSharedVariables.Add(new VariableFloat());
-    }
+	public void SetData<T>(string key, T value)
+	{
+		if (!data.ContainsKey(key))
+		{
+			data.Add(key, value);
+		}
+		else
+		{
+			data[key] = value;
+		}
+	}
 
-    [ContextMenu("Add GameObjectVariable")]
-    public void AddGameObjectVariable()
-    {
-        baseSharedVariables.Add(new VariableGameObject());
-    }
+	public void RemoveData(string key)
+	{
+		data.Remove(key);
+	}
 }
+

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CheckForPlayer : TreeNode
+public class CheckForPlayer : BTBaseNode
 {
     private static int playerLayerMask = 1 << 6;
 
@@ -13,9 +13,9 @@ public class CheckForPlayer : TreeNode
         transform = _transform;
     }
 
-    public override TaskStatus Evaluate()
+    public override TaskStatus Evaluate(Blackboard blackboard)
     {
-        object t = GetData("Target");
+        object t = blackboard.GetData<object>("Target");
         if (t == null)
         {
             Collider[] colliders = Physics.OverlapSphere(
@@ -23,15 +23,15 @@ public class CheckForPlayer : TreeNode
 
             if (colliders.Length > 0)
             {
-                parent.parent.SetData("Target", colliders[0].transform);
-                status = TaskStatus.Success;
-                return status;
+                blackboard.SetData("Target", colliders[0].transform);
+                state = TaskStatus.SUCCESS;
+                return state;
             }
-            status = TaskStatus.Failed;
-            return status;
+            state = TaskStatus.FAILURE;
+            return state;
         }
-        status = TaskStatus.Success;
-        return status;
+        state = TaskStatus.SUCCESS;
+        return state;
     }
 
 }

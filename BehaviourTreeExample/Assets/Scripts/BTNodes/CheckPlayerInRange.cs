@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CheckPlayerInRange : TreeNode
+public class CheckPlayerInRange : BTBaseNode
 {
     private static int playerLayerMask = 1 << 6;
 
@@ -13,9 +13,9 @@ public class CheckPlayerInRange : TreeNode
         transform = _transform;
     }
 
-    public override TaskStatus Evaluate()
+    public override TaskStatus Evaluate(Blackboard blackboard)
     {
-        object t = GetData("Target");
+        object t = blackboard.GetData<object>("Target");
         if (t == null)
         {
             Collider[] colliders = Physics.OverlapSphere(
@@ -23,24 +23,16 @@ public class CheckPlayerInRange : TreeNode
 
             if (colliders.Length > 0)
             {
-                parent.parent.SetData("Target", colliders[0].transform);
+                blackboard.SetData("Target", colliders[0].transform);
                 Guard.hasVision = true;
-                status = TaskStatus.Success;
-                return status;
+                state = TaskStatus.SUCCESS;
+                return state;
             }
-            status = TaskStatus.Failed;
-            return status;
+            state = TaskStatus.FAILURE;
+            return state;
         }
-        Transform target = (Transform)t;
-        if (Vector3.Distance(transform.position, target.position) > Guard.fovRange)
-        {
-            parent.parent.ClearData("Target");
-            Guard.hasVision = false;
-            status = TaskStatus.Failed;
-            return status;
-        }
-        status = TaskStatus.Success;
-        return status;
+        state = TaskStatus.SUCCESS;
+        return state;
     }
 
 }

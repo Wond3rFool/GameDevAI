@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FunctionNode : TreeNode
+public class FunctionNode : BTBaseNode
 {
     private readonly Action function;
 
@@ -12,9 +12,9 @@ public class FunctionNode : TreeNode
         this.function = function;
     }
 
-    public override TaskStatus Evaluate()
+    public override TaskStatus Evaluate(Blackboard blackboard)
     {
         function?.Invoke();
-        return TaskStatus.Success;
+        return TaskStatus.SUCCESS;
     }
 }

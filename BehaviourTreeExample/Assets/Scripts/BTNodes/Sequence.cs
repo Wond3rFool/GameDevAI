@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Sequence : TreeNode
+public class Sequence : BTBaseNode
 {
-    public Sequence(List<TreeNode> children) : base(children) { }
+    public Sequence(List<BTBaseNode> children) : base(children) { }
 
-    public override TaskStatus Evaluate()
+    public override TaskStatus Evaluate(Blackboard blackboard)
     {
         // Keep track of the index of the child node being evaluated
         int currentChildIndex = 0;
@@ -14,26 +14,26 @@ public class Sequence : TreeNode
         // Keep evaluating child nodes until all have succeeded or one fails
         while (currentChildIndex < children.Count)
         {
-            TaskStatus childStatus = children[currentChildIndex].Evaluate();
+            TaskStatus childStatus = children[currentChildIndex].Evaluate(blackboard);
 
             // If the child succeeded, move on to the next child
-            if (childStatus == TaskStatus.Success)
+            if (childStatus == TaskStatus.SUCCESS)
             {
                 currentChildIndex++;
             }
             // If the child is still running, continue evaluating it
-            else if (childStatus == TaskStatus.Running)
+            else if (childStatus == TaskStatus.RUNNING)
             {
-                return TaskStatus.Running;
+                return TaskStatus.RUNNING;
             }
             // If the child fails, return failure
             else
             {
-                return TaskStatus.Failed;
+                return TaskStatus.FAILURE;
             }
         }
 
         // If all child nodes succeeded, return success
-        return TaskStatus.Success;
+        return TaskStatus.SUCCESS;
     }
 }

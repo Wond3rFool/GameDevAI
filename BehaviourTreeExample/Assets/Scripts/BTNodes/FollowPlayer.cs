@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class FollowPlayer : TreeNode
+public class FollowPlayer : BTBaseNode
 {
     private Transform transform;
     private Animator animator;
@@ -18,10 +18,10 @@ public class FollowPlayer : TreeNode
         agent = transform.GetComponent<NavMeshAgent>();
     }
 
-    public override TaskStatus Evaluate()
+    public override TaskStatus Evaluate(Blackboard blackboard)
     {
 
 
-        return TaskStatus.Running;
+        return TaskStatus.RUNNING;
     }
 }

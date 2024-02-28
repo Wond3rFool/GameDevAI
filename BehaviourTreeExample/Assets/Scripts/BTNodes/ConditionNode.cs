@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class ConditionNode : TreeNode
+public class ConditionNode : BTBaseNode
 {
     private Func<bool> condition;
 
@@ -12,16 +12,16 @@ public class ConditionNode : TreeNode
         this.condition = condition;
     }
 
-    public override TaskStatus Evaluate()
+    public override TaskStatus Evaluate(Blackboard blackboard)
     {
         if (condition())
         {
-            status = TaskStatus.Success;
+            state = TaskStatus.SUCCESS;
         }
         else
         {
-            status = TaskStatus.Failed;
+            state = TaskStatus.FAILURE;
         }
-        return status;
+        return state;
     }
 }

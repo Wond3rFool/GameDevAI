@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public enum TaskStatus { Success, Failed, Running }
+public enum NodeState { Success, Failed, Running }
 public class TreeNode
 {
     public TreeNode parent;
-    protected TaskStatus status;
+    protected NodeState status;
     protected List<TreeNode> children = new List<TreeNode>();
 
     private Dictionary<string, object> dataContext = new Dictionary<string, object>();
@@ -31,7 +31,7 @@ public class TreeNode
         children.Add(node);
     }
 
-    public virtual TaskStatus Evaluate() => TaskStatus.Failed;
+    public virtual NodeState Evaluate() => NodeState.Failed;
 
     public void SetData(string key, object value)
     {

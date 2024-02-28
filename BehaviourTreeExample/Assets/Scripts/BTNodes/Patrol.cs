@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using TMPro;
 
-public class Patrol : TreeNode
+public class Patrol : BTBaseNode
 {
     private Transform transform;
     private Animator animator;
@@ -26,7 +26,7 @@ public class Patrol : TreeNode
         waypoints = _waypoints; 
     }
 
-    public override TaskStatus Evaluate()
+    public override TaskStatus Evaluate(Blackboard blackboard)
     {
         if (waiting)
         {
@@ -61,7 +61,7 @@ public class Patrol : TreeNode
             }
         }
 
-        status = TaskStatus.Running;
-        return status;
+        state = TaskStatus.RUNNING;
+        return state;
     }
 }

@@ -2,33 +2,33 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Parallel : TreeNode
+public class Parallel : BTBaseNode
 {
     public Parallel() : base(){}
-    public Parallel(List<TreeNode> children) : base(children) { }
+    public Parallel(List<BTBaseNode> children) : base(children) { }
 
-    public override TaskStatus Evaluate()
+    public override TaskStatus Evaluate(Blackboard blackboard)
     {
         bool anyChildRunning = false;
-        foreach (TreeNode child in children) 
+        foreach (BTBaseNode child in children) 
         {
-            switch (child.Evaluate()) 
+            switch (child.Evaluate(blackboard)) 
             {
-                case TaskStatus.Failed:
-                    status = TaskStatus.Failed;
-                    return status;
-                case TaskStatus.Success:
+                case TaskStatus.FAILURE:
+                    state = TaskStatus.FAILURE;
+                    return state;
+                case TaskStatus.SUCCESS:
                     continue;
-                case TaskStatus.Running:
+                case TaskStatus.RUNNING:
                     anyChildRunning = true;
                     continue;
                 default:
-                    status = TaskStatus.Success;
-                    return status;
+                    state = TaskStatus.SUCCESS;
+                    return state;
             }
         }
 
-        status = anyChildRunning ? TaskStatus.Running : TaskStatus.Success;
-        return status;
+        state = anyChildRunning ? TaskStatus.RUNNING : TaskStatus.SUCCESS;
+        return state;
     }
 }

@@ -1,29 +1,28 @@
 using System.Collections.Generic;
 
-public class Selector : TreeNode
+public class Selector : BTBaseNode
 {
     public Selector() : base() { }
-    public Selector(List<TreeNode> children) : base(children) { }
+    public Selector(List<BTBaseNode> children) : base(children) { }
 
-    public override TaskStatus Evaluate()
+    public override TaskStatus Evaluate(Blackboard blackboard)
     {
-        foreach (TreeNode child in children)
+        foreach (BTBaseNode child in children)
         {
-            switch (child.Evaluate())
+            switch (child.Evaluate(blackboard))
             {
-                case TaskStatus.Failed:
+                case TaskStatus.FAILURE:
+                    state = TaskStatus.FAILURE;
                     continue;
-                case TaskStatus.Success:
-                    status = TaskStatus.Success;
-                    return status;
-                case TaskStatus.Running:
-                    status = TaskStatus.Running;
-                    // Keep iterating through other children to check for additional running tasks
+                case TaskStatus.SUCCESS:
+                    state = TaskStatus.SUCCESS;
+                    return state;
+                case TaskStatus.RUNNING:
                     break;
             }
         }
 
-        status = TaskStatus.Failed;
-        return status;
+        state = TaskStatus.FAILURE;
+        return state;
     }
 }

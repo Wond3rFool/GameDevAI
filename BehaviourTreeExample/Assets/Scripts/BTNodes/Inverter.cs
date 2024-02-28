@@ -3,28 +3,28 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class Inverter : TreeNode
+public class Inverter : BTBaseNode
 {
-	private TreeNode child;
+	private BTBaseNode child;
 
-	public Inverter(TreeNode child)
+	public Inverter(BTBaseNode child)
 	{
 		this.child = child;
 	}
 
-	public override TaskStatus Evaluate()
+	public override TaskStatus Evaluate(Blackboard blackboard)
 	{
-		switch (child.Evaluate())
+		switch (child.Evaluate(blackboard))
 		{
-			case TaskStatus.Success:
-				return TaskStatus.Failed;
-			case TaskStatus.Failed:
-				return TaskStatus.Success;
-			case TaskStatus.Running:
-				return TaskStatus.Running;
+			case TaskStatus.SUCCESS:
+				return TaskStatus.FAILURE;
+			case TaskStatus.FAILURE:
+				return TaskStatus.SUCCESS;
+			case TaskStatus.RUNNING:
+				return TaskStatus.RUNNING;
 			default:
 				// Handle any unexpected states, if necessary
-				return TaskStatus.Failed;
+				return TaskStatus.FAILURE;
 		}
 	}
 }

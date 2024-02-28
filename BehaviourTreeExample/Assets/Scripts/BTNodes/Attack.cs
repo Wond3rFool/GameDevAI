@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class Attack : TreeNode
+public class Attack : BTBaseNode
 {
     private Animator animator;
 
@@ -18,9 +18,9 @@ public class Attack : TreeNode
         text = _text;
     }
 
-    public override TaskStatus Evaluate()
+    public override TaskStatus Evaluate(Blackboard blackboard)
     {
-        Transform target = (Transform)GetData("Target");
+        Transform target = blackboard.GetData<Transform>("Target");
         
         attackCounter += Time.deltaTime;
         text.text = "Attacking player";
@@ -28,12 +28,12 @@ public class Attack : TreeNode
         if (attackCounter >= attackTime && target != null) 
         {
             target.GetComponent<Player>().TakeDamage(target.gameObject, 1);
-            ClearData("Target");
+            blackboard.RemoveData("Target");
             attackCounter = 0f;
-            status = TaskStatus.Success;
-            return status;
+            state = TaskStatus.SUCCESS;
+            return state;
         }
-        status = TaskStatus.Running;
-        return status;
+        state = TaskStatus.RUNNING;
+        return state;
     }
 }

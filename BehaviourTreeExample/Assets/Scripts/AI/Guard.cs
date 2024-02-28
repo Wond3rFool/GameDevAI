@@ -19,37 +19,27 @@ public class Guard : Tree
     public static bool hasWeapon = false;
     public static bool hasVision = false;
 
-    protected override TreeNode SetupTree()
+    protected override BTBaseNode SetupTree()
     {
-        TreeNode findWeapon = new Sequence(new List<TreeNode>
+        return new Selector(new List<BTBaseNode>
         {
-            new ConditionNode(SeenPlayer),
-            new Inverter(new ConditionNode(HasWeapon)),
-            new GrabWeapon(transform, weaponSpot,text),
-        });
+            new Sequence(new List<BTBaseNode>
+            {
+                new ConditionNode(SeenPlayer),
+                new Inverter(new ConditionNode(HasWeapon)),
+                new GrabWeapon(transform, weaponSpot,text),
+            }),
 
-        TreeNode chasePlayer = new Sequence(new List<TreeNode>
-        {
-            new ConditionNode(HasWeapon),
-            new ToTarget(transform, text),
-            new CheckAttackRange(transform),
-            new Attack(transform, text)
-        });
+            new Sequence(new List<BTBaseNode>
+            {
+                new ConditionNode(HasWeapon),
+                new ToTarget(transform, text),
+                new CheckAttackRange(transform),
+                new Attack(transform, text)
+            }),
 
-        TreeNode patrol = new Selector(new List<TreeNode> 
-        {
-            new CheckPlayerInRange(transform),
             new Patrol(transform, waypoints, text)
         });
-
-        TreeNode root = new Selector(new List<TreeNode>
-        {
-            findWeapon,
-            chasePlayer,
-            patrol
-        });
-
-        return root;
     }
 
     private void toggleWeapon() => hasWeapon = !hasWeapon;
