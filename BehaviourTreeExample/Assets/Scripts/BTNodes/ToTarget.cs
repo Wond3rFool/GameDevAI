@@ -21,7 +21,7 @@ public class ToTarget : BTBaseNode
     {
         Transform target = blackboard.GetData<Transform>("Target");
 
-        if (Vector3.Distance(transform.position, target.position) > 2.0f)
+        if (Vector3.Distance(transform.position, target.position) > 1.5f)
         {
             animator.Play("Rifle Walk");
             agent.SetDestination(target.position);

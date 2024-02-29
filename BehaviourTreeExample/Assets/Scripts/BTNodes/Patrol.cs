@@ -32,7 +32,6 @@ public class Patrol : BTBaseNode
         {
             waitCounter += Time.deltaTime;
             animator.Play("Idle");
-            agent.isStopped = true;
             text.text = "Idling";
             Debug.Log(text.text);
             if (waitCounter > waitTime) 
@@ -45,7 +44,6 @@ public class Patrol : BTBaseNode
         else 
         {
             Transform wp = waypoints[currentWaypointIndex];
-            agent.isStopped = false;
             if (Vector3.Distance(transform.position, wp.position) < 0.4f)
             {
                 transform.position = wp.position;

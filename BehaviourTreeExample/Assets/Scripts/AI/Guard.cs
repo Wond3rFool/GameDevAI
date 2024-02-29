@@ -13,7 +13,7 @@ public class Guard : Tree
 
     public static float speed = 2f;
     public static float fovRange = 5f;
-    public static float attackRange = 2f;
+    public static float attackRange = 1.5f;
 
     public static bool hasWeapon = false;
     public static bool isStunned = false;
