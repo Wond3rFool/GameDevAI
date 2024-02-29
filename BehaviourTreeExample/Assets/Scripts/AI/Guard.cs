@@ -1,9 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using TMPro;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.AI;
 
 public class Guard : Tree
 {
@@ -11,6 +8,8 @@ public class Guard : Tree
     public Transform weaponSpot;
 
     public TextMeshPro text;
+
+    public LayerMask targetLayer;
 
     public static float speed = 2f;
     public static float fovRange = 5f;
@@ -27,13 +26,14 @@ public class Guard : Tree
         {
             new Sequence(new List<BTBaseNode>
             {
-                new Inverter(new CheckPlayerInRange(transform)),
+                new Inverter(new CheckTargetInRange(transform, 1000, "Target", targetLayer)),
                 new Patrol(transform, waypoints, text)
             }),
 
             new Sequence(new List<BTBaseNode>
             {
                 new CheckForPlayer(transform, obstacleLayer),
+                new CheckTargetInRange(transform, 8, "Target", targetLayer),
                 new Inverter(new ConditionNode(HasWeapon)),
                 new GrabWeapon(transform, weaponSpot,text),
                 new FunctionNode(() => hasWeapon = true)
@@ -45,6 +45,7 @@ public class Guard : Tree
                 new Parallel(new List<BTBaseNode>
                 {
                     new CheckForPlayer(transform, obstacleLayer),
+                    new CheckTargetInRange(transform, 8, "Target", targetLayer),
                     new ToTarget(transform, text),
                     new CheckAttackRange(transform),
                 }),
@@ -56,8 +57,4 @@ public class Guard : Tree
     }
 
     private bool HasWeapon() => hasWeapon;
-
-    public static void toggleVision() => hasVision = !hasVision;
-
-    private bool SeenPlayer() => hasVision;
 }

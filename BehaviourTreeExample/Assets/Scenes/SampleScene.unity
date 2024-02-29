@@ -476,6 +476,9 @@ MonoBehaviour:
   - {fileID: 400465772}
   weaponSpot: {fileID: 667485510}
   text: {fileID: 1724971892}
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 64
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 256
@@ -728,6 +731,9 @@ Transform:
   - {fileID: 1817478150}
   - {fileID: 400465772}
   - {fileID: 667485510}
+  - {fileID: 1524154277}
+  - {fileID: 1855832099}
+  - {fileID: 1735342883}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1009,11 +1015,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fee611217e4db0f41a25a491885efab5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Camera: {fileID: 1696898269}
+  CameraTransofrm: {fileID: 1696898269}
+  throwPoint: {fileID: 233287682}
   rotationSpeed: 360
   moveSpeed: 3
   deathForce: 1500
   ragdoll: {fileID: 1392164572}
+  projectilePrefab: {fileID: 4478574991635490120, guid: 924813178de48004cb517e47828e46d6,
+    type: 3}
 --- !u!136 &1267729047
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1064,6 +1073,37 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 1666334633}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1524154276
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1524154277}
+  m_Layer: 0
+  m_Name: SafeSpot1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1524154277
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1524154276}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -12.89, y: 0, z: -0.75}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 817693172}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1666334633
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1805,6 +1845,37 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &1735342882
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1735342883}
+  m_Layer: 0
+  m_Name: SafeSpot3
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1735342883
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1735342882}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.87, y: 0, z: 11.76}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 817693172}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1744050385
 GameObject:
   m_ObjectHideFlags: 0
@@ -2041,6 +2112,7 @@ GameObject:
   - component: {fileID: 1840160679}
   - component: {fileID: 1840160681}
   - component: {fileID: 1840160680}
+  - component: {fileID: 1840160682}
   m_Layer: 0
   m_Name: AI_Ninja
   m_TagString: Untagged
@@ -2101,6 +2173,61 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &1840160682
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1840160678}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 794f0ee09c67de7498fb2d6bcc43074d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  safeSpots:
+  - {fileID: 1524154277}
+  - {fileID: 1855832099}
+  - {fileID: 1735342883}
+  followDistance: 3
+  detectDistance: 1000
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 128
+  friendLayer:
+    serializedVersion: 2
+    m_Bits: 64
+--- !u!1 &1855832098
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1855832099}
+  m_Layer: 0
+  m_Name: SafeSpot2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1855832099
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1855832098}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 7.13, y: 0, z: -9.8}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 817693172}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1868206819
 GameObject:
   m_ObjectHideFlags: 0

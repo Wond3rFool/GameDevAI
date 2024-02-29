@@ -18,7 +18,7 @@ public abstract class Tree : MonoBehaviour
         root = SetupTree();
     }
 
-    void Update()
+    private void Update()
     {
         if (root != null) 
         {

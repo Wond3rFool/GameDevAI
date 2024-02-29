@@ -5,7 +5,8 @@ using UnityEngine.Assertions.Must;
 
 public class Player : MonoBehaviour, IDamageable
 {
-    public Transform Camera;
+    public Transform CameraTransofrm;
+    public Transform throwPoint;
     [SerializeField] private float rotationSpeed = 180f;
     [SerializeField] private float moveSpeed = 3;
     [SerializeField] private float deathForce = 1000;
@@ -16,8 +17,13 @@ public class Player : MonoBehaviour, IDamageable
     private float hor = 0;
     private Vector3 moveDirection;
     private Collider mainCollider;
+
+    public static bool beingAttacked;
+
+    public GameObject projectilePrefab;
+
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         rb = GetComponent<Rigidbody>();
         animator = GetComponentInChildren<Animator>();
@@ -40,11 +46,11 @@ public class Player : MonoBehaviour, IDamageable
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         vert = Input.GetAxis("Vertical");
         hor = Input.GetAxis("Horizontal");
-        Vector3 forwardDirection = Vector3.Scale(new Vector3(1, 0, 1), Camera.transform.forward);
+        Vector3 forwardDirection = Vector3.Scale(new Vector3(1, 0, 1), CameraTransofrm.transform.forward);
         Vector3 rightDirection = Vector3.Cross(Vector3.up, forwardDirection.normalized);
         moveDirection = forwardDirection.normalized * vert + rightDirection.normalized * hor;
         if (moveDirection != Vector3.zero)
@@ -55,11 +61,21 @@ public class Player : MonoBehaviour, IDamageable
 
         bool isMoving = hor != 0 || vert != 0;
         ChangeAnimation(isMoving ? "Walk Crouch" : "Crouch Idle", isMoving ? 0.05f : 0.15f);
+
+        if (Input.GetMouseButtonDown(0))
+        {
+
+            GameObject projectile = Instantiate(projectilePrefab, transform.position + new Vector3(0, 0, 1), Quaternion.identity);
+            Projectile projectileScript = projectile.GetComponent<Projectile>();
+
+            projectileScript.SetTargetDirection(new Vector3(1,0,1));
+
+        }
     }
 
     private void FixedUpdate()
     {
-        
+
     }
 
     public void TakeDamage(GameObject attacker, int damage)
@@ -77,7 +93,7 @@ public class Player : MonoBehaviour, IDamageable
         {
             rib.isKinematic = false;
             rib.useGravity = true;
-            rib.AddForce(Vector3.Scale(new Vector3(1,0.5f,1),(transform.position - attacker.transform.position).normalized * deathForce));
+            rib.AddForce(Vector3.Scale(new Vector3(1, 0.5f, 1), (transform.position - attacker.transform.position).normalized * deathForce));
         }
         ragdoll.transform.SetParent(null);
 
@@ -87,13 +103,13 @@ public class Player : MonoBehaviour, IDamageable
     private void GetComponentsRecursively<T>(GameObject obj, ref List<T> components)
     {
         T component = obj.GetComponent<T>();
-        if(component != null)
+        if (component != null)
         {
             components.Add(component);
         }
-        foreach(Transform t in obj.transform)
+        foreach (Transform t in obj.transform)
         {
-            if(t.gameObject == obj) { continue; }
+            if (t.gameObject == obj) { continue; }
             GetComponentsRecursively<T>(t.gameObject, ref components);
         }
     }

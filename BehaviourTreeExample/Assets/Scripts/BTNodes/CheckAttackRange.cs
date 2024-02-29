@@ -29,6 +29,7 @@ public class CheckAttackRange : BTBaseNode
             agent.SetDestination(transform.position);
             return TaskStatus.SUCCESS;
         }
+
         return TaskStatus.RUNNING;
     }
 }
