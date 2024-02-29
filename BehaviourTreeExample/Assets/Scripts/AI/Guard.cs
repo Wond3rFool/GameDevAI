@@ -16,7 +16,7 @@ public class Guard : Tree
     public static float attackRange = 2f;
 
     public static bool hasWeapon = false;
-    public static bool hasVision = false;
+    public static bool isStunned = false;
 
     public LayerMask obstacleLayer;
 
@@ -24,6 +24,14 @@ public class Guard : Tree
     {
         return new Selector(new List<BTBaseNode>
         {
+            new Sequence(new List<BTBaseNode>
+            {
+                new ConditionNode(() => isStunned),
+                new WaitFor(4f),
+                new Inverter(new FunctionNode(() => isStunned = false))
+            }),
+
+
             new Sequence(new List<BTBaseNode>
             {
                 new Inverter(new CheckTargetInRange(transform, 1000, "Target", targetLayer)),

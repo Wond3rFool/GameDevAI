@@ -40,7 +40,8 @@ public class Rogue : Tree
             new Sequence(new List<BTBaseNode>{ 
                 new isPlayerThreatened(),
                 new FindSafeSpot(transform, safeSpots),
-                new SavePlayer(transform, targetLayer)
+                new SavePlayer(transform, targetLayer),
+                new StunTarget(transform, targetLayer)
             }),
             new FollowPlayer(transform, followDistance, "Friend"),
         });

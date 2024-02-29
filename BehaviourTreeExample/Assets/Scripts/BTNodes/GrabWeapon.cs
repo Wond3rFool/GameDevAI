@@ -35,6 +35,7 @@ public class GrabWeapon : BTBaseNode
         else
         {
             animator.Play("Rifle Walk");
+            agent.isStopped = false;
             agent.SetDestination(target.position);
             transform.LookAt(target.position);
             text.text = "Finding Weapon";
