@@ -1,37 +1,42 @@
+using System.Collections;
 using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    public float arcHeight = 5f; // Adjust this value to control the height of the arc
-    public float speed = 5f;
+    [SerializeField]
+    private float initialVelocity;
+    [SerializeField]
+    private float angle;
 
-    private Vector3 targetDirection;
-    private Vector3 initialPosition;
+    private bool fired;
 
-    private void Start()
+    private void Update()
     {
-        initialPosition = transform.position;
+        if (fired) 
+        {
+           StartFunction();
+            fired = false;
+        }
     }
 
-    public void SetTargetDirection(Vector3 direction)
+    IEnumerator Coroutine_Movement(float v0, float angle)
     {
-        targetDirection = direction.normalized;
-        LaunchProjectile();
+        float t = 0;
+        while (t < 100)
+        {
+            float x = v0 * t * Mathf.Cos(angle);
+            float y = v0 * t * Mathf.Sin(angle) - (1f / 2f) * -Physics.gravity.y * Mathf.Pow(t, 2);
+            transform.position = new Vector3(x, y, 0);
+            t += Time.deltaTime;
+            yield return null;
+        }
     }
 
-    private void LaunchProjectile()
+    private void StartFunction() 
     {
-        Vector3 launchDirection = CalculateLaunchDirection();
-        GetComponent<Rigidbody>().velocity = launchDirection * speed;
-    }
-
-    private Vector3 CalculateLaunchDirection()
-    {
-        float time = Mathf.Sqrt(-2 * arcHeight / Physics.gravity.y) + Mathf.Sqrt(2 * (arcHeight) / Physics.gravity.y);
-
-        Vector3 velocityXZ = targetDirection * (Vector3.Distance(initialPosition, initialPosition + targetDirection) / time);
-        Vector3 launchDirection = velocityXZ + Vector3.up * Mathf.Sqrt(-2 * Physics.gravity.y * arcHeight);
-
-        return launchDirection.normalized;
+        fired = true;
+        float angle = this.angle * Mathf.Deg2Rad;
+        StopAllCoroutines();
+        StartCoroutine(Coroutine_Movement(initialVelocity, angle));
     }
 }

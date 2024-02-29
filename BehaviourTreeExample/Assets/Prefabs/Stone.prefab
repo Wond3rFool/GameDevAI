@@ -127,5 +127,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e93c0300007c98b4faf1b582deb9de56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  arcHeight: 4
-  speed: 3
+  arcHeight: 15
+  speed: 30

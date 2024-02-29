@@ -67,8 +67,7 @@ public class Player : MonoBehaviour, IDamageable
 
             GameObject projectile = Instantiate(projectilePrefab, transform.position + new Vector3(0, 0, 1), Quaternion.identity);
             Projectile projectileScript = projectile.GetComponent<Projectile>();
-
-            projectileScript.SetTargetDirection(new Vector3(1,0,1));
+           // projectileScript.SetTarget(throwPoint.position);
 
         }
     }
