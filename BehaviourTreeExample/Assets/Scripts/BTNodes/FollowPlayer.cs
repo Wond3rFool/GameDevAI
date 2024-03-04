@@ -32,7 +32,7 @@ public class FollowPlayer : BTBaseNode
         if (distanceToPlayer > followDistance)
         {
             agent.SetDestination(playerPosition);
-            agent.speed = 3.5f;
+            agent.speed = 2f;
             animator.Play("Walk Crouch");
             return TaskStatus.RUNNING;
         }

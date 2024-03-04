@@ -41,7 +41,9 @@ public class Rogue : Tree
                 new isPlayerThreatened(),
                 new FindSafeSpot(transform, safeSpots),
                 new SavePlayer(transform, targetLayer),
-                new StunTarget(transform, targetLayer)
+                new WaitFor(1.5f),
+                new StunTarget(transform, targetLayer),
+                new FunctionNode(() => Player.beingAttacked = false)
             }),
             new FollowPlayer(transform, followDistance, "Friend"),
         });

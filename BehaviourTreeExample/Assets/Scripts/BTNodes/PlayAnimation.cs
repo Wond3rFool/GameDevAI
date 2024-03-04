@@ -1,29 +1,34 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-public class SavePlayer : BTBaseNode
+
+public class PlayAnimation : BTBaseNode
 {
-    private Animator animator;
     private NavMeshAgent agent;
+    private Animator animator;
+    private string animationName;
 
-    private Transform transform;
-    private LayerMask target;
-
-    public SavePlayer(Transform transform, LayerMask target) 
+    public PlayAnimation(Transform transform, string animationName) 
     {
-        this.transform = transform;
-        this.target = target;
-
         agent = transform.GetComponent<NavMeshAgent>();
         animator = transform.GetComponentInChildren<Animator>();
+        this.animationName = animationName;
     }
+
     public override TaskStatus Evaluate(Blackboard blackboard)
     {
-        animator.Play("Throw");
+        agent.SetDestination(agent.transform.position);
+        agent.isStopped = true;
+        animator.Play(animationName);
         bool isPlaying = animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f;
+
         if (isPlaying)
         {
             return TaskStatus.RUNNING;
         }
+        agent.isStopped = false;
         return TaskStatus.SUCCESS;
     }
+
 }

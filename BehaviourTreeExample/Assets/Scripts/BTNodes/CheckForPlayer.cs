@@ -33,13 +33,9 @@ public class CheckForPlayer : BTBaseNode
                 if (hits[i].collider.CompareTag("Obstacle"))
                 {
                     // Obstacle in the way
-                    Guard.isStunned = false;
                     return TaskStatus.FAILURE;
                 }
             }
-
-            // No obstacles, player is in line of sight
-            Guard.isStunned = true;
             return TaskStatus.SUCCESS;
         }
 

@@ -27,6 +27,8 @@ public class Guard : Tree
             new Sequence(new List<BTBaseNode>
             {
                 new ConditionNode(() => isStunned),
+                new DisplayText(text, "Is Stunned"),
+                new PlayAnimation(transform, "Crouch Idle"),
                 new WaitFor(4f),
                 new Inverter(new FunctionNode(() => isStunned = false))
             }),
@@ -53,6 +55,7 @@ public class Guard : Tree
                 new Parallel(new List<BTBaseNode>
                 {
                     new CheckForPlayer(transform, obstacleLayer),
+                    new Inverter(new ConditionNode(() => isStunned)),
                     new CheckTargetInRange(transform, 8, "Target", targetLayer),
                     new ToTarget(transform, text),
                     new CheckAttackRange(transform),
