@@ -395,6 +395,7 @@ GameObject:
   - component: {fileID: 539429223}
   - component: {fileID: 539429225}
   - component: {fileID: 539429226}
+  - component: {fileID: 539429227}
   m_Layer: 0
   m_Name: AI_Guard
   m_TagString: Untagged
@@ -482,6 +483,28 @@ MonoBehaviour:
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 256
+--- !u!114 &539429227
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 539429221}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 417ac7b1fa054d44288554da90a3cf1e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  radius: 8
+  angle: 100
+  targetMask:
+    serializedVersion: 2
+    m_Bits: 64
+  obstructionMask:
+    serializedVersion: 2
+    m_Bits: 256
+  playerRef: {fileID: 0}
+  canSeePlayer: 0
 --- !u!1001 &593971748
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1201,7 +1224,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CameraTransofrm: {fileID: 1696898269}
-  throwPoint: {fileID: 233287682}
   rotationSpeed: 360
   moveSpeed: 3
   deathForce: 1500

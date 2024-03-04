@@ -6,7 +6,6 @@ using UnityEngine.Assertions.Must;
 public class Player : MonoBehaviour, IDamageable
 {
     public Transform CameraTransofrm;
-    public Transform throwPoint;
     [SerializeField] private float rotationSpeed = 180f;
     [SerializeField] private float moveSpeed = 3;
     [SerializeField] private float deathForce = 1000;
@@ -61,15 +60,6 @@ public class Player : MonoBehaviour, IDamageable
 
         bool isMoving = hor != 0 || vert != 0;
         ChangeAnimation(isMoving ? "Walk Crouch" : "Crouch Idle", isMoving ? 0.05f : 0.15f);
-
-        if (Input.GetMouseButtonDown(0))
-        {
-
-            GameObject projectile = Instantiate(projectilePrefab, transform.position + new Vector3(0, 0, 1), Quaternion.identity);
-            Projectile projectileScript = projectile.GetComponent<Projectile>();
-           // projectileScript.SetTarget(throwPoint.position);
-
-        }
     }
 
     private void FixedUpdate()
