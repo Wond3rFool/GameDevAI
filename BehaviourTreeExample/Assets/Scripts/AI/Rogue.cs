@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -18,17 +19,12 @@ public class Rogue : Tree
     [SerializeField]
     private LayerMask friendLayer;
 
-    private BTBaseNode tree;
-    private NavMeshAgent agent;
-    private Animator animator;
-
+    [SerializeField]
+    private TextMeshPro text;
 
     protected override void Awake()
     {
         base.Awake();
-        agent = GetComponent<NavMeshAgent>();
-        animator = GetComponentInChildren<Animator>();
-        Debug.Log("I have awoken");
     }
 
     protected override BTBaseNode SetupTree()
@@ -39,13 +35,19 @@ public class Rogue : Tree
 
             new Sequence(new List<BTBaseNode>{ 
                 new isPlayerThreatened(),
+                new DisplayText(text, "Finding hiding spot"),
                 new FindSafeSpot(transform, safeSpots),
                 new SavePlayer(transform, targetLayer),
+                new DisplayText(text, "Throwing Stone"),
                 new WaitFor(1.5f),
                 new StunTarget(transform, targetLayer),
                 new FunctionNode(() => Player.beingAttacked = false)
             }),
-            new FollowPlayer(transform, followDistance, "Friend"),
+            new Parallel(new List<BTBaseNode>
+            {
+                new FollowPlayer(transform, followDistance, "Friend"),
+                new DisplayText(text, "Following Player")
+            }),
         });
     }
 }

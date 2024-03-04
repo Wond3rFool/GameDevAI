@@ -34,7 +34,7 @@ public class FollowPlayer : BTBaseNode
             agent.SetDestination(playerPosition);
             agent.speed = 2f;
             animator.Play("Walk Crouch");
-            return TaskStatus.RUNNING;
+            return TaskStatus.SUCCESS;
         }
         else
         {
