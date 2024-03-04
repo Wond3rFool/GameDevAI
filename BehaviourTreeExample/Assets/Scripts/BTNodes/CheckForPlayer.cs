@@ -3,9 +3,9 @@ using UnityEngine;
 
 public class CheckForPlayer : BTBaseNode
 {
-    private static int playerLayerMask = 1 << 6;
     private LayerMask obstacleLayer;
     private Transform transform;
+    private float coneAngle = 45f; // Set your desired cone angle here
 
     public CheckForPlayer(Transform _transform, LayerMask obstacleLayer)
     {
@@ -21,24 +21,28 @@ public class CheckForPlayer : BTBaseNode
         if (t != null)
         {
             // Calculate direction to the player
-            Vector3 direction = targetTransform.position - transform.position;
+            Vector3 directionToPlayer = targetTransform.position - transform.position;
 
-            // Raycast to check for obstacles
-            RaycastHit[] hits;
-            hits = Physics.RaycastAll(transform.position, direction, direction.magnitude, obstacleLayer);
-
-            // Check if any obstacle is hit
-            for (int i = 0; i < hits.Length; i++)
+            // Check if the player is within the cone angle
+            if (Vector3.Angle(transform.forward, directionToPlayer) <= coneAngle * 0.5f)
             {
-                if (hits[i].collider.CompareTag("Obstacle"))
+                // Raycast to check for obstacles between NPC and player
+                RaycastHit hit;
+                if (Physics.Raycast(transform.position, directionToPlayer, out hit, Mathf.Infinity, obstacleLayer))
                 {
-                    // Obstacle in the way
-                    return TaskStatus.FAILURE;
+                    // Obstacle detected, player not visible
+                    if (hit.collider.CompareTag("Obstacle"))
+                    {
+                        return TaskStatus.FAILURE;
+                    }
                 }
+
+                // No obstacles in the way, player visible
+                return TaskStatus.SUCCESS;
             }
-            return TaskStatus.SUCCESS;
         }
 
+        // Player not within cone or not found
         return TaskStatus.FAILURE;
     }
 }
