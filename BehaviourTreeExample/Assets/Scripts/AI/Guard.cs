@@ -23,8 +23,6 @@ public class Guard : Tree, IHear
 
     private bool canHearPlayer;
 
-    private Vector3 positionToCheck;
-
     protected override BTBaseNode SetupTree()
     {
         return new Selector(new List<BTBaseNode>
@@ -47,7 +45,7 @@ public class Guard : Tree, IHear
                 {
                     new ConditionNode(() => isStunned),
                     new DisplayText(text, "Is Stunned"),
-                    new PlayAnimation(transform, "Crouch Idle"),
+                    new PlayAnimation(transform, "Scared"),
                     new WaitFor(4f),
                     new FunctionNode(() => isStunned = false),
                     new Inverter(new FunctionNode(() => canHearPlayer = false)),
@@ -66,6 +64,8 @@ public class Guard : Tree, IHear
                     new Inverter(new ConditionNode(HasWeapon)),
                     new WaitFor(0.5f),
                     new GrabWeapon(transform, weaponSpot,text),
+                    new PlayAnimation(transform, "Crouch Idle"),
+                    new WaitFor(1.5f),
                     new FunctionNode(() => hasWeapon = true)
                 }),
 

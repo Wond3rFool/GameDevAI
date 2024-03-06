@@ -24,9 +24,10 @@ public class GrabWeapon : BTBaseNode
 
     public override TaskStatus Evaluate(Blackboard blackboard)
     {
-        if (Vector3.Distance(transform.position, target.position) < 2.5f)
+        if (Vector3.Distance(transform.position, target.position) < 1.5f)
         {
             transform.position = target.position;
+            agent.SetDestination(transform.position);
             text.text = "Found weapon";
             Guard.hasWeapon = true;
             Debug.Log(text.text);

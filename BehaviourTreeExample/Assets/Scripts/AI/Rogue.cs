@@ -38,7 +38,7 @@ public class Rogue : Tree
                 new FindSafeSpot(transform, safeSpots),
                 new SavePlayer(transform, targetLayer),
                 new DisplayText(text, "Throwing Stone"),
-                new WaitFor(1.5f),
+                new WaitFor(1.0f),
                 new StunTarget(transform, targetLayer),
                 new FunctionNode(() => Player.beingAttacked = false)
             }),

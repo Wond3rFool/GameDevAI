@@ -33,6 +33,7 @@ public class Patrol : BTBaseNode
             waitCounter += Time.deltaTime;
             animator.Play("Idle");
             text.text = "Idling";
+            agent.SetDestination(transform.position);
             Debug.Log(text.text);
             if (waitCounter > waitTime) 
             {
