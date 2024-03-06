@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Assertions.Must;
 
 public class Player : MonoBehaviour, IDamageable
 {
@@ -11,6 +9,8 @@ public class Player : MonoBehaviour, IDamageable
     [SerializeField] private float deathForce = 1000;
     [SerializeField] private GameObject ragdoll;
     private Rigidbody rb;
+    private Sound walking;
+    private Sound sneaking;
     private Animator animator;
     private float vert = 0;
     private float hor = 0;
@@ -27,6 +27,8 @@ public class Player : MonoBehaviour, IDamageable
         rb = GetComponent<Rigidbody>();
         animator = GetComponentInChildren<Animator>();
         mainCollider = GetComponent<Collider>();
+        walking = new Sound(transform.position, 10, Sound.SoundType.Interesting);
+        sneaking = new Sound(transform.position, 10, Sound.SoundType.Sneaky);
         var rigidBodies = GetComponentsInChildren<Rigidbody>();
         foreach (Rigidbody rib in rigidBodies)
         {
@@ -45,28 +47,52 @@ public class Player : MonoBehaviour, IDamageable
     }
 
     // Update is called once per frame
+    private bool isCrouching = false;
+    private float crouchSpeedMultiplier = 0.5f; // Adjust this value based on your preference
+
+    // Update is called once per frame
     private void Update()
     {
         vert = Input.GetAxis("Vertical");
         hor = Input.GetAxis("Horizontal");
+
+        // Check if the player is holding the Shift key to crouch
+        isCrouching = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
+
+        // Adjust move speed based on crouching state
+        float currentMoveSpeed = isCrouching ? moveSpeed * crouchSpeedMultiplier : moveSpeed;
+
         Vector3 forwardDirection = Vector3.Scale(new Vector3(1, 0, 1), CameraTransofrm.transform.forward);
         Vector3 rightDirection = Vector3.Cross(Vector3.up, forwardDirection.normalized);
         moveDirection = forwardDirection.normalized * vert + rightDirection.normalized * hor;
+
         if (moveDirection != Vector3.zero)
         {
             transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(moveDirection.normalized, Vector3.up), rotationSpeed * Time.deltaTime);
         }
-        transform.position += moveDirection.normalized * moveSpeed * Time.deltaTime;
+
+        transform.position += moveDirection.normalized * currentMoveSpeed * Time.deltaTime;
 
         bool isMoving = hor != 0 || vert != 0;
-        ChangeAnimation(isMoving ? "Walk Crouch" : "Crouch Idle", isMoving ? 0.05f : 0.15f);
+        if (isCrouching)
+        {
+            ChangeAnimation(isMoving ? "Walk Crouch" : "Crouch Idle", isMoving ? 0.05f : 0.15f);
+            Sounds.MakeSound(sneaking);
+        }
+        else
+        {
+            ChangeAnimation(isMoving ? "Rifle Walk" : "Idle", isMoving ? 0.05f : 0.15f);
+            if (isMoving)
+            {
+                Sounds.MakeSound(walking);
+            }
+            else 
+            {
+                Sounds.MakeSound(sneaking);
+            }
+        }
+
     }
-
-    private void FixedUpdate()
-    {
-
-    }
-
     public void TakeDamage(GameObject attacker, int damage)
     {
         animator.enabled = false;

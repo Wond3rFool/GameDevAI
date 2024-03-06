@@ -2,7 +2,7 @@
 using TMPro;
 using UnityEngine;
 
-public class Guard : Tree
+public class Guard : Tree, IHear
 {
     public Transform[] waypoints;
     public Transform weaponSpot;
@@ -20,52 +20,78 @@ public class Guard : Tree
 
     public LayerMask obstacleLayer;
 
+    private bool canHearPlayer;
+    private bool canSeePlayer;
+
+    private Vector3 positionToCheck;
+
     protected override BTBaseNode SetupTree()
     {
         return new Selector(new List<BTBaseNode>
         {
-            new Sequence(new List<BTBaseNode>
+            new Selector(new List<BTBaseNode>
             {
-                new ConditionNode(() => isStunned),
-                new DisplayText(text, "Is Stunned"),
-                new PlayAnimation(transform, "Crouch Idle"),
-                new WaitFor(4f),
-                new Inverter(new FunctionNode(() => isStunned = false))
+                new ConditionNode(() => canHearPlayer),
+
             }),
 
-
-            new Sequence(new List<BTBaseNode>
+            new Selector(new List<BTBaseNode>
             {
-                new Inverter(new CheckTargetInRange(transform, 1000, "Target", targetLayer)),
-                new Patrol(transform, waypoints, text)
-            }),
+                new ConditionNode(() => canSeePlayer),
+                new Sequence(new List<BTBaseNode>
+                {
+                    new ConditionNode(() => isStunned),
+                    new DisplayText(text, "Is Stunned"),
+                    new PlayAnimation(transform, "Crouch Idle"),
+                    new WaitFor(4f),
+                    new Inverter(new FunctionNode(() => isStunned = false))
+                }),
+                new Sequence(new List<BTBaseNode>
+                {
+                    new Inverter(new CheckTargetInRange(transform, 1000, "Target", targetLayer)),
+                    new Patrol(transform, waypoints, text)
+                }),
 
-            new Sequence(new List<BTBaseNode>
-            {
-                new CheckForPlayer(transform, obstacleLayer),
-                new CheckTargetInRange(transform, 8, "Target", targetLayer),
-                new Inverter(new ConditionNode(HasWeapon)),
-                new GrabWeapon(transform, weaponSpot,text),
-                new FunctionNode(() => hasWeapon = true)
-            }),
-
-            new Sequence(new List<BTBaseNode>
-            {
-                new ConditionNode(HasWeapon),
-                new Parallel(new List<BTBaseNode>
+                new Sequence(new List<BTBaseNode>
                 {
                     new CheckForPlayer(transform, obstacleLayer),
-                    new Inverter(new ConditionNode(() => isStunned)),
                     new CheckTargetInRange(transform, 8, "Target", targetLayer),
-                    new ToTarget(transform, text),
-                    new CheckAttackRange(transform),
+                    new Inverter(new ConditionNode(HasWeapon)),
+                    new WaitFor(0.5f),
+                    new GrabWeapon(transform, weaponSpot,text),
+                    new FunctionNode(() => hasWeapon = true)
                 }),
-                new Attack(text)
-            }),
 
+                new Sequence(new List<BTBaseNode>
+                {
+                    new ConditionNode(HasWeapon),
+                    new Parallel(new List<BTBaseNode>
+                    {
+                        new CheckForPlayer(transform, obstacleLayer),
+                        new Inverter(new ConditionNode(() => isStunned)),
+                        new CheckTargetInRange(transform, 8, "Target", targetLayer),
+                        new ToTarget(transform, text),
+                        new CheckAttackRange(transform),
+                    }),
+                    new Attack(text)
+                }),
+            }),
             new Patrol(transform, waypoints, text)
         });
     }
 
     private bool HasWeapon() => hasWeapon;
+
+    public void RespondToSound(Sound sound)
+    {
+        if (sound.soundType == Sound.SoundType.Interesting)
+        {
+            canHearPlayer = true;
+            positionToCheck = sound.pos;
+        }
+        else 
+        {
+            canHearPlayer = false;
+        }
+    }
 }

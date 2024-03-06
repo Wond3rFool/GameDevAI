@@ -5,7 +5,7 @@ public class CheckForPlayer : BTBaseNode
 {
     private LayerMask obstacleLayer;
     private Transform transform;
-    private float coneAngle = 45f; // Set your desired cone angle here
+    private float coneAngle = 100f; // Set your desired cone angle here
 
     public CheckForPlayer(Transform _transform, LayerMask obstacleLayer)
     {
