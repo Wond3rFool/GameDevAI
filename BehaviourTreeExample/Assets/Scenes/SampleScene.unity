@@ -495,7 +495,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 417ac7b1fa054d44288554da90a3cf1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 12.2
+  radius: 12
   angle: 100
   targetMask:
     serializedVersion: 2

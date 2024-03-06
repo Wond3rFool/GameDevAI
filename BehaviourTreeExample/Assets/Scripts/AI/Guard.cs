@@ -15,13 +15,13 @@ public class Guard : Tree, IHear
     public static float fovRange = 5f;
     public static float attackRange = 1.5f;
 
-    public static bool hasWeapon = false;
-    public static bool isStunned = false;
+    public static bool hasWeapon;
+    public static bool isStunned;
+    public static bool canSeePlayer;
 
     public LayerMask obstacleLayer;
 
     private bool canHearPlayer;
-    private bool canSeePlayer;
 
     private Vector3 positionToCheck;
 
@@ -29,22 +29,29 @@ public class Guard : Tree, IHear
     {
         return new Selector(new List<BTBaseNode>
         {
-            new Selector(new List<BTBaseNode>
+            new Sequence(new List<BTBaseNode>
             {
                 new ConditionNode(() => canHearPlayer),
-
+                new DisplayText(text, "Heard Player"),
+                new Parallel(new List<BTBaseNode>
+                {
+                    new Inverter(new SetDestination(transform, "SoundTarget")),
+                    new Inverter(new ConditionNode(() => isStunned)),
+                    new Inverter(new CheckForPlayer(transform, obstacleLayer)),
+                }),
             }),
 
             new Selector(new List<BTBaseNode>
             {
-                new ConditionNode(() => canSeePlayer),
                 new Sequence(new List<BTBaseNode>
                 {
                     new ConditionNode(() => isStunned),
                     new DisplayText(text, "Is Stunned"),
                     new PlayAnimation(transform, "Crouch Idle"),
                     new WaitFor(4f),
-                    new Inverter(new FunctionNode(() => isStunned = false))
+                    new FunctionNode(() => isStunned = false),
+                    new Inverter(new FunctionNode(() => canHearPlayer = false)),
+
                 }),
                 new Sequence(new List<BTBaseNode>
                 {
@@ -55,7 +62,7 @@ public class Guard : Tree, IHear
                 new Sequence(new List<BTBaseNode>
                 {
                     new CheckForPlayer(transform, obstacleLayer),
-                    new CheckTargetInRange(transform, 8, "Target", targetLayer),
+                    new CheckTargetInRange(transform, 24, "Target", targetLayer),
                     new Inverter(new ConditionNode(HasWeapon)),
                     new WaitFor(0.5f),
                     new GrabWeapon(transform, weaponSpot,text),
@@ -69,7 +76,7 @@ public class Guard : Tree, IHear
                     {
                         new CheckForPlayer(transform, obstacleLayer),
                         new Inverter(new ConditionNode(() => isStunned)),
-                        new CheckTargetInRange(transform, 8, "Target", targetLayer),
+                        new CheckTargetInRange(transform, 24, "Target", targetLayer),
                         new ToTarget(transform, text),
                         new CheckAttackRange(transform),
                     }),
@@ -87,7 +94,7 @@ public class Guard : Tree, IHear
         if (sound.soundType == Sound.SoundType.Interesting)
         {
             canHearPlayer = true;
-            positionToCheck = sound.pos;
+            Blackboard.SetData("SoundTarget", sound.pos);
         }
         else 
         {

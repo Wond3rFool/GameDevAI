@@ -38,6 +38,7 @@ public class CheckForPlayer : BTBaseNode
                 }
 
                 // No obstacles in the way, player visible
+                Guard.canSeePlayer = true;
                 return TaskStatus.SUCCESS;
             }
         }

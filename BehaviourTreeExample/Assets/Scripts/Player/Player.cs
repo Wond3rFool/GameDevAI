@@ -27,8 +27,6 @@ public class Player : MonoBehaviour, IDamageable
         rb = GetComponent<Rigidbody>();
         animator = GetComponentInChildren<Animator>();
         mainCollider = GetComponent<Collider>();
-        walking = new Sound(transform.position, 10, Sound.SoundType.Interesting);
-        sneaking = new Sound(transform.position, 10, Sound.SoundType.Sneaky);
         var rigidBodies = GetComponentsInChildren<Rigidbody>();
         foreach (Rigidbody rib in rigidBodies)
         {
@@ -55,6 +53,9 @@ public class Player : MonoBehaviour, IDamageable
     {
         vert = Input.GetAxis("Vertical");
         hor = Input.GetAxis("Horizontal");
+
+        walking = new Sound(transform.position, 10, Sound.SoundType.Interesting);
+        sneaking = new Sound(transform.position, 10, Sound.SoundType.Sneaky);
 
         // Check if the player is holding the Shift key to crouch
         isCrouching = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
