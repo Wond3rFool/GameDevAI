@@ -80,7 +80,8 @@ public class Guard : Tree, IHear
                         new ToTarget(transform, text),
                         new CheckAttackRange(transform),
                     }),
-                    new Attack(text)
+                    new Attack(text),
+                    new FunctionNode(() => canHearPlayer = false)
                 }),
             }),
             new Patrol(transform, waypoints, text)
