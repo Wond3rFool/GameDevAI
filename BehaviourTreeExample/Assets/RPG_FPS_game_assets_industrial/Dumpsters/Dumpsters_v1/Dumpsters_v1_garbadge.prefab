@@ -12,12 +12,12 @@ GameObject:
   - component: {fileID: 33000010294312094}
   - component: {fileID: 23000010126103198}
   - component: {fileID: 65000011506030884}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Dumpsters_v1_garbadge
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_NavMeshLayer: 1
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &4000013765492046
 Transform:
@@ -95,5 +95,5 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 4.9367228, y: 1.623363, z: 1.7630844}
-  m_Center: {x: -0.00000011920929, y: 0.005109787, z: 0}
+  m_Size: {x: 4.9367228, y: 1.6233635, z: 1.7630844}
+  m_Center: {x: 0, y: 0.005109787, z: 0}

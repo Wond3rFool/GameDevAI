@@ -12,12 +12,12 @@ GameObject:
   - component: {fileID: 33000013777585996}
   - component: {fileID: 23000012360611450}
   - component: {fileID: 64000011546560374}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Hangar_v1_full
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_NavMeshLayer: 1
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &4000013703715314
 Transform:

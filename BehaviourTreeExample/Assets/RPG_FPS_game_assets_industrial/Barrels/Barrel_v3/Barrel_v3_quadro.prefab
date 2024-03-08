@@ -12,12 +12,12 @@ GameObject:
   - component: {fileID: 33000013345210986}
   - component: {fileID: 23000013927580282}
   - component: {fileID: 64000011782940336}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Barrel_v3_quadro
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_NavMeshLayer: 1
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &4000011765245650
 Transform:

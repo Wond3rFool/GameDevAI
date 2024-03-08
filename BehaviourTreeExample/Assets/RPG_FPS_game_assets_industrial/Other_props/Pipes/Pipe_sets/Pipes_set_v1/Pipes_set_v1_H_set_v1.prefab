@@ -12,12 +12,12 @@ GameObject:
   - component: {fileID: 33000011784741550}
   - component: {fileID: 23000012782189962}
   - component: {fileID: 64000010741144892}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Pipes_set_v1_H_set_v1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_NavMeshLayer: 1
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &4000012343697126
 Transform:

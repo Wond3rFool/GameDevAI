@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4000010230679374}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Concrete_fence_v2_S
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -45,11 +45,11 @@ GameObject:
   - component: {fileID: 33000014169494080}
   - component: {fileID: 23000014090315290}
   - component: {fileID: 65000012913242684}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Concrete_fence_v2_S
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &4000012794743664
@@ -142,11 +142,11 @@ GameObject:
   - component: {fileID: 33000012874370198}
   - component: {fileID: 23000011800568128}
   - component: {fileID: 65000010613152302}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Concrete_fence_v2_lattice_S
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &4000011405727266
