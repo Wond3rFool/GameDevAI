@@ -31,7 +31,7 @@ public class Player : MonoBehaviour, IDamageable
         foreach (Rigidbody rib in rigidBodies)
         {
             rib.isKinematic = true;
-            rib.useGravity = false;
+            rib.useGravity = true;
         }
 
         var cols = GetComponentsInChildren<Collider>();

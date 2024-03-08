@@ -17,8 +17,5 @@ public class Sound
 
     public readonly Vector3 pos;
 
-    /// <summary>
-    /// This the intensity of the sound.
-    /// </summary>
     public readonly float range;
 }

@@ -58,7 +58,6 @@ public class Patrol : BTBaseNode
             {
                 animator.Play("Rifle Walk");
                 agent.SetDestination(wp.position);
-                transform.LookAt(wp.position);
                 text.text = "Patrolling";
                 Debug.Log(text.text);
                 state = TaskStatus.SUCCESS;
