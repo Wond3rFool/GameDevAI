@@ -1,12 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class StunTarget : BTBaseNode
 {
+    private Transform transform;
+    private LayerMask layer;
+
     public StunTarget(Transform transform, LayerMask layer) 
     {
-        //save for later if maybe I want to actually use a projectile.
+        this.transform = transform;
+        this.layer = layer;
     }
 
     public override TaskStatus Evaluate(Blackboard blackboard)

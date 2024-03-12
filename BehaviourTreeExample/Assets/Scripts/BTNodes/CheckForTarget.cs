@@ -13,7 +13,7 @@ public class CheckForTarget : BTBaseNode
         this.obstacleLayer = obstacleLayer;
         this.target = target;
         this.transform = transform;
-        this.coneAngle = coneAngle; 
+        this.coneAngle = coneAngle;
     }
 
     public override TaskStatus Evaluate(Blackboard blackboard)
@@ -26,26 +26,37 @@ public class CheckForTarget : BTBaseNode
             // Calculate direction to the player
             Vector3 directionToPlayer = targetTransform.position - transform.position;
 
+            // Debug ray for direction to player
+            Debug.DrawRay(transform.position, directionToPlayer, Color.blue);
+
             // Check if the player is within the cone angle
-            //if (Vector3.Angle(transform.forward, directionToPlayer) <= coneAngle * 0.5f)
-            //{
+            if (Vector3.Angle(transform.forward, directionToPlayer) <= coneAngle * 0.5f)
+            {
                 // Raycast to check for obstacles between NPC and player
                 RaycastHit hit;
                 if (Physics.Raycast(transform.position, directionToPlayer, out hit, 500, obstacleLayer))
                 {
+                    // Debug ray for obstacle raycast
+                    Debug.DrawRay(transform.position, directionToPlayer * hit.distance, Color.red);
+
                     // Obstacle detected, player not visible
                     if (hit.collider.CompareTag("Obstacle"))
                     {
+                        Debug.Log("Obstacle hit: " + hit.collider.gameObject.name);
                         return TaskStatus.FAILURE;
                     }
+                    else
+                    {
+                        // Debug ray for no obstacle raycast
+                        Debug.DrawRay(transform.position, directionToPlayer * 500, Color.green);
+                        Guard.canSeePlayer = true;
+                        return TaskStatus.SUCCESS;
+                    }
                 }
-
-                // No obstacles in the way, player visible
-                Guard.canSeePlayer = true;
-                return TaskStatus.SUCCESS;
-            //}
+            }
+            // Player not within cone or not found
+            return TaskStatus.FAILURE;
         }
-
         // Player not within cone or not found
         return TaskStatus.FAILURE;
     }

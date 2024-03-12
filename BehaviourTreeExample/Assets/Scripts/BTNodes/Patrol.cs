@@ -34,7 +34,7 @@ public class Patrol : BTBaseNode
             animator.Play("Idle");
             text.text = "Idling";
             agent.SetDestination(transform.position);
-            Debug.Log(text.text);
+            Debug.Log(agent.transform.name + ": " + text.text);
             if (waitCounter > waitTime) 
             {
                 waiting = false;
@@ -59,7 +59,7 @@ public class Patrol : BTBaseNode
                 animator.Play("Rifle Walk");
                 agent.SetDestination(wp.position);
                 text.text = "Patrolling";
-                Debug.Log(text.text);
+                Debug.Log(agent.transform.name + ": " + text.text);
                 state = TaskStatus.SUCCESS;
                 return state;
             }

@@ -21,8 +21,8 @@ public class CheckTargetInRange : BTBaseNode
 
     public override TaskStatus Evaluate(Blackboard blackboard)
     {
-        object t = blackboard.GetData<object>(target);
-        if (t == null)
+        object targetObject = blackboard.GetData<object>(target);
+        if (targetObject == null)
         {
             Collider[] colliders = Physics.OverlapSphere(
                 transform.position, range, layer);
@@ -38,7 +38,7 @@ public class CheckTargetInRange : BTBaseNode
         }
         else 
         {
-            Transform target = (Transform)t;
+            Transform target = (Transform)targetObject;
             if (Vector3.Distance(transform.position, target.position) > range)
             {
                 Player.beingAttacked = false;

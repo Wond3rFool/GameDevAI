@@ -9,6 +9,8 @@ public class Guard : Tree, IHear
     [SerializeField]
     private Transform weaponSpot;
     [SerializeField]
+    private Transform viewTransform;
+    [SerializeField]
     private TextMeshPro text;
     [SerializeField]
     private LayerMask targetLayer;
@@ -34,7 +36,7 @@ public class Guard : Tree, IHear
                 {
                     new Inverter(new SetDestination(transform, "SoundTarget")),
                     new Inverter(new ConditionNode(() => isStunned)),
-                    new Inverter(new CheckForTarget(transform, obstacleLayer, "Target", 100)),
+                    new Inverter(new CheckForTarget(viewTransform, obstacleLayer, "Target", 100)),
                 }),
             }),
 
@@ -58,8 +60,8 @@ public class Guard : Tree, IHear
 
                 new Sequence(new List<BTBaseNode>
                 {
-                    new CheckForTarget(transform, obstacleLayer, "Target", 100f),
-                    new CheckTargetInRange(transform, 12, "Target", targetLayer),
+                    new CheckForTarget(viewTransform, obstacleLayer, "Target", 100f),
+                    new CheckTargetInRange(transform, 8, "Target", targetLayer),
                     new Inverter(new ConditionNode(() => hasWeapon)),
                     new DisplayText(text, "saw player but no weapon"),
                     new WaitFor(2.5f),
@@ -74,11 +76,11 @@ public class Guard : Tree, IHear
                 new Sequence(new List<BTBaseNode>
                 {
                     new ConditionNode(() => hasWeapon),
+                    new CheckForTarget(viewTransform, obstacleLayer, "Target", 100),
                     new Parallel(new List<BTBaseNode>
                     {
-                        new CheckForTarget(transform, obstacleLayer, "Target", 100),
                         new Inverter(new ConditionNode(() => isStunned)),
-                        new CheckTargetInRange(transform, 12, "Target", targetLayer),
+                        new CheckTargetInRange(transform, 16, "Target", targetLayer),
                         new ToTarget(transform, text),
                         new CheckAttackRange(transform, attackRange, "Target", "Side Kick"),
                     }),
