@@ -29,7 +29,6 @@ public class GrabWeapon : BTBaseNode
             transform.position = target.position;
             agent.SetDestination(transform.position);
             text.text = "Found weapon";
-            Guard.hasWeapon = true;
             Debug.Log(text.text);
             return TaskStatus.SUCCESS;
         }

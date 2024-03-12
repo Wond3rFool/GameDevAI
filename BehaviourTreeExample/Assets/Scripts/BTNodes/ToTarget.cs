@@ -25,7 +25,6 @@ public class ToTarget : BTBaseNode
         {
             animator.Play("Rifle Walk");
             agent.SetDestination(target.position);
-            transform.LookAt(target.position);
             text.text = "Player in sight";
             Player.beingAttacked = true;
             Debug.Log(text.text);

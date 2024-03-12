@@ -5,8 +5,6 @@ using UnityEngine.AI;
 
 public class CheckAttackRange : BTBaseNode
 {
-    private static int playerLayerMask = 1 << 6;
-
     private Transform transform;
     private Animator animator;
     private NavMeshAgent agent;

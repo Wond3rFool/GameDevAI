@@ -46,7 +46,7 @@ public class Player : MonoBehaviour, IDamageable
 
     // Update is called once per frame
     private bool isCrouching = false;
-    private float crouchSpeedMultiplier = 0.5f; // Adjust this value based on your preference
+    private float crouchSpeedMultiplier = 0.8f; // Adjust this value based on your preference
 
     // Update is called once per frame
     private void Update()

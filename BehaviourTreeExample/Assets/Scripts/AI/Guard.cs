@@ -10,17 +10,16 @@ public class Guard : Tree, IHear
     public TextMeshPro text;
 
     public LayerMask targetLayer;
+    public LayerMask obstacleLayer;
 
     public static float speed = 2f;
     public static float fovRange = 5f;
     public static float attackRange = 1.5f;
 
-    public static bool hasWeapon;
     public static bool isStunned;
     public static bool canSeePlayer;
 
-    public LayerMask obstacleLayer;
-
+    private bool hasWeapon;
     private bool canHearPlayer;
 
     protected override BTBaseNode SetupTree()
@@ -61,7 +60,7 @@ public class Guard : Tree, IHear
                 {
                     new CheckForPlayer(transform, obstacleLayer),
                     new CheckTargetInRange(transform, 24, "Target", targetLayer),
-                    new Inverter(new ConditionNode(HasWeapon)),
+                    new Inverter(new ConditionNode(() => hasWeapon)),
                     new WaitFor(0.5f),
                     new GrabWeapon(transform, weaponSpot,text),
                     new PlayAnimation(transform, "Crouch Idle"),
@@ -71,7 +70,7 @@ public class Guard : Tree, IHear
 
                 new Sequence(new List<BTBaseNode>
                 {
-                    new ConditionNode(HasWeapon),
+                    new ConditionNode(() => hasWeapon),
                     new Parallel(new List<BTBaseNode>
                     {
                         new CheckForPlayer(transform, obstacleLayer),
@@ -87,8 +86,6 @@ public class Guard : Tree, IHear
             new Patrol(transform, waypoints, text)
         });
     }
-
-    private bool HasWeapon() => hasWeapon;
 
     public void RespondToSound(Sound sound)
     {
