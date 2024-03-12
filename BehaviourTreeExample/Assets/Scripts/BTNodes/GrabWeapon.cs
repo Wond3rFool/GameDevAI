@@ -12,11 +12,10 @@ public class GrabWeapon : BTBaseNode
     private NavMeshAgent agent;
     private TextMeshPro text;
 
-    public GrabWeapon(Transform _transform, Transform _target, TextMeshPro _text) 
+    public GrabWeapon(Transform _transform, Transform _target) 
     {
         transform = _transform;
         target = _target;
-        text = _text;
 
         animator = transform.GetComponentInChildren<Animator>();
         agent = transform.GetComponent<NavMeshAgent>();
@@ -28,16 +27,12 @@ public class GrabWeapon : BTBaseNode
         {
             transform.position = target.position;
             agent.SetDestination(transform.position);
-            text.text = "Found weapon";
-            Debug.Log(text.text);
             return TaskStatus.SUCCESS;
         }
         else
         {
             animator.Play("Rifle Walk");
             agent.SetDestination(target.position);
-            text.text = "Finding Weapon";
-            Debug.Log(text.text);
             return TaskStatus.RUNNING;
         }
     }

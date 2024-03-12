@@ -17,7 +17,7 @@ public class DisplayText : BTBaseNode
     public override TaskStatus Evaluate(Blackboard blackboard)
     {
         text.text = toDisplay;
-
+        Debug.Log(text.text);
         return TaskStatus.SUCCESS;
     }
 

@@ -8,22 +8,28 @@ public class CheckAttackRange : BTBaseNode
     private Transform transform;
     private Animator animator;
     private NavMeshAgent agent;
+    private float attackRange;
+    private string target;
+    private string animationName;
 
-    public CheckAttackRange(Transform _transform) 
+    public CheckAttackRange(Transform transform, float attackRange, string target, string animationName) 
     {
-        transform = _transform;
+        this.transform = transform;
+        this.attackRange = attackRange;
+        this.target = target;
+        this.animationName = animationName;
         animator = transform.GetComponentInChildren<Animator>();
-        agent = _transform.GetComponent<NavMeshAgent>();
+        agent = transform.GetComponent<NavMeshAgent>();
     }
 
     public override TaskStatus Evaluate(Blackboard blackboard)
     {
-        object t = blackboard.GetData<object>("Target");
-        Transform target = (Transform)t;
+        object targetToHit = blackboard.GetData<object>(target);
+        Transform targetTransform = (Transform)targetToHit;
 
-        if (Vector3.Distance(transform.position, target.position) <= Guard.attackRange) 
+        if (Vector3.Distance(transform.position, targetTransform.position) <= attackRange) 
         {
-            animator.Play("Kick");
+            animator.Play(animationName);
             agent.SetDestination(transform.position);
             return TaskStatus.SUCCESS;
         }

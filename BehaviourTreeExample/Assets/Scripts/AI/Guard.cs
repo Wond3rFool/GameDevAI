@@ -4,21 +4,21 @@ using UnityEngine;
 
 public class Guard : Tree, IHear
 {
-    public Transform[] waypoints;
-    public Transform weaponSpot;
-
-    public TextMeshPro text;
-
-    public LayerMask targetLayer;
-    public LayerMask obstacleLayer;
-
-    public static float speed = 2f;
-    public static float fovRange = 5f;
-    public static float attackRange = 1.5f;
+    [SerializeField]
+    private Transform[] waypoints;
+    [SerializeField]
+    private Transform weaponSpot;
+    [SerializeField]
+    private TextMeshPro text;
+    [SerializeField]
+    private LayerMask targetLayer;
+    [SerializeField]
+    private LayerMask obstacleLayer;
 
     public static bool isStunned;
     public static bool canSeePlayer;
 
+    private float attackRange = 1.5f;
     private bool hasWeapon;
     private bool canHearPlayer;
 
@@ -34,7 +34,7 @@ public class Guard : Tree, IHear
                 {
                     new Inverter(new SetDestination(transform, "SoundTarget")),
                     new Inverter(new ConditionNode(() => isStunned)),
-                    new Inverter(new CheckForPlayer(transform, obstacleLayer)),
+                    new Inverter(new CheckForTarget(transform, obstacleLayer, "Target", 100)),
                 }),
             }),
 
@@ -58,12 +58,15 @@ public class Guard : Tree, IHear
 
                 new Sequence(new List<BTBaseNode>
                 {
-                    new CheckForPlayer(transform, obstacleLayer),
-                    new CheckTargetInRange(transform, 24, "Target", targetLayer),
+                    new CheckForTarget(transform, obstacleLayer, "Target", 100f),
+                    new CheckTargetInRange(transform, 12, "Target", targetLayer),
                     new Inverter(new ConditionNode(() => hasWeapon)),
-                    new WaitFor(0.5f),
-                    new GrabWeapon(transform, weaponSpot,text),
+                    new DisplayText(text, "saw player but no weapon"),
+                    new WaitFor(2.5f),
+                    new DisplayText(text, "Finding weapon"),
+                    new GrabWeapon(transform, weaponSpot),
                     new PlayAnimation(transform, "Crouch Idle"),
+                    new DisplayText(text, "Found a weapon"),
                     new WaitFor(1.5f),
                     new FunctionNode(() => hasWeapon = true)
                 }),
@@ -73,11 +76,11 @@ public class Guard : Tree, IHear
                     new ConditionNode(() => hasWeapon),
                     new Parallel(new List<BTBaseNode>
                     {
-                        new CheckForPlayer(transform, obstacleLayer),
+                        new CheckForTarget(transform, obstacleLayer, "Target", 100),
                         new Inverter(new ConditionNode(() => isStunned)),
-                        new CheckTargetInRange(transform, 24, "Target", targetLayer),
+                        new CheckTargetInRange(transform, 12, "Target", targetLayer),
                         new ToTarget(transform, text),
-                        new CheckAttackRange(transform),
+                        new CheckAttackRange(transform, attackRange, "Target", "Side Kick"),
                     }),
                     new Attack(text),
                     new FunctionNode(() => canHearPlayer = false)
@@ -98,5 +101,10 @@ public class Guard : Tree, IHear
         {
             canHearPlayer = false;
         }
+    }
+
+    public void HasBeenStunned() 
+    {
+        isStunned = true;
     }
 }

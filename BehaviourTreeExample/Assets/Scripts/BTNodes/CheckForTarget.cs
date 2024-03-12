@@ -1,34 +1,37 @@
 using System.Collections;
 using UnityEngine;
 
-public class CheckForPlayer : BTBaseNode
+public class CheckForTarget : BTBaseNode
 {
     private LayerMask obstacleLayer;
     private Transform transform;
-    private float coneAngle = 100f; // Set your desired cone angle here
+    private string target;
+    private float coneAngle; // Set your desired cone angle here
 
-    public CheckForPlayer(Transform _transform, LayerMask obstacleLayer)
+    public CheckForTarget(Transform transform, LayerMask obstacleLayer, string target, float coneAngle)
     {
         this.obstacleLayer = obstacleLayer;
-        transform = _transform;
+        this.target = target;
+        this.transform = transform;
+        this.coneAngle = coneAngle; 
     }
 
     public override TaskStatus Evaluate(Blackboard blackboard)
     {
-        object t = blackboard.GetData<object>("Target");
-        Transform targetTransform = (Transform)t;
+        object targetToFind = blackboard.GetData<object>(target);
+        Transform targetTransform = (Transform)targetToFind;
 
-        if (t != null)
+        if (targetTransform != null)
         {
             // Calculate direction to the player
             Vector3 directionToPlayer = targetTransform.position - transform.position;
 
             // Check if the player is within the cone angle
-            if (Vector3.Angle(transform.forward, directionToPlayer) <= coneAngle * 0.5f)
-            {
+            //if (Vector3.Angle(transform.forward, directionToPlayer) <= coneAngle * 0.5f)
+            //{
                 // Raycast to check for obstacles between NPC and player
                 RaycastHit hit;
-                if (Physics.Raycast(transform.position, directionToPlayer, out hit, Mathf.Infinity, obstacleLayer))
+                if (Physics.Raycast(transform.position, directionToPlayer, out hit, 500, obstacleLayer))
                 {
                     // Obstacle detected, player not visible
                     if (hit.collider.CompareTag("Obstacle"))
@@ -40,7 +43,7 @@ public class CheckForPlayer : BTBaseNode
                 // No obstacles in the way, player visible
                 Guard.canSeePlayer = true;
                 return TaskStatus.SUCCESS;
-            }
+            //}
         }
 
         // Player not within cone or not found

@@ -21,6 +21,8 @@ public class Rogue : Tree
     [SerializeField]
     private TextMeshPro text;
 
+    private bool foundSafeSpot;
+
     protected override void Awake()
     {
         base.Awake();
@@ -36,11 +38,20 @@ public class Rogue : Tree
                 new isPlayerThreatened(),
                 new DisplayText(text, "Finding hiding spot"),
                 new FindSafeSpot(transform, safeSpots),
+                new DisplayText(text, "In Hiding"),
+                new Inverter(new FunctionNode(() => foundSafeSpot = true))
+
+            }),
+            new Sequence(new List<BTBaseNode>
+            {
+                new ConditionNode(() => foundSafeSpot),
                 new SavePlayer(transform, targetLayer),
                 new DisplayText(text, "Throwing Stone"),
                 new WaitFor(1.0f),
                 new StunTarget(transform, targetLayer),
-                new FunctionNode(() => Player.beingAttacked = false)
+                new FunctionNode(() => Player.beingAttacked = false),
+                new Inverter(new FunctionNode(() => foundSafeSpot = false))
+
             }),
             new Parallel(new List<BTBaseNode>
             {
