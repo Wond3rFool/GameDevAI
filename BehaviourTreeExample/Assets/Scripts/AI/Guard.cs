@@ -36,7 +36,7 @@ public class Guard : Tree, IHear
                 {
                     new Inverter(new SetDestination(transform, "SoundTarget")),
                     new Inverter(new ConditionNode(() => isStunned)),
-                    new Inverter(new CheckForTarget(viewTransform, obstacleLayer, "Target", 100)),
+                    new Inverter(new CheckForTarget(viewTransform, obstacleLayer, "Target", 100.0f)),
                 }),
             }),
 
@@ -60,7 +60,7 @@ public class Guard : Tree, IHear
 
                 new Sequence(new List<BTBaseNode>
                 {
-                    new CheckForTarget(viewTransform, obstacleLayer, "Target", 100f),
+                    new CheckForTarget(viewTransform, obstacleLayer, "Target", 100.0f),
                     new CheckTargetInRange(transform, 8, "Target", targetLayer),
                     new Inverter(new ConditionNode(() => hasWeapon)),
                     new DisplayText(text, "saw player but no weapon"),
@@ -76,7 +76,7 @@ public class Guard : Tree, IHear
                 new Sequence(new List<BTBaseNode>
                 {
                     new ConditionNode(() => hasWeapon),
-                    new CheckForTarget(viewTransform, obstacleLayer, "Target", 100),
+                    new CheckForTarget(viewTransform, obstacleLayer, "Target", 100.0f),
                     new Parallel(new List<BTBaseNode>
                     {
                         new Inverter(new ConditionNode(() => isStunned)),

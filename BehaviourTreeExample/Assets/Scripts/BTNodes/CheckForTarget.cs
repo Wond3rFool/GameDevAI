@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class CheckForTarget : BTBaseNode
 {
@@ -24,38 +25,33 @@ public class CheckForTarget : BTBaseNode
         if (targetTransform != null)
         {
             // Calculate direction to the player
-            Vector3 directionToPlayer = targetTransform.position - transform.position;
+            Vector3 directionToTarget = (targetTransform.position - transform.position).normalized;
 
-            // Debug ray for direction to player
-            Debug.DrawRay(transform.position, directionToPlayer, Color.blue);
-
-            // Check if the player is within the cone angle
-            if (Vector3.Angle(transform.forward, directionToPlayer) <= coneAngle * 0.5f)
+            if (Vector3.Angle(transform.position, directionToTarget) < coneAngle / 2)
             {
                 // Raycast to check for obstacles between NPC and player
                 RaycastHit hit;
-                if (Physics.Raycast(transform.position, directionToPlayer, out hit, 500, obstacleLayer))
+                if (Physics.Raycast(transform.position, directionToTarget, out hit, 500, obstacleLayer))
                 {
                     // Debug ray for obstacle raycast
-                    Debug.DrawRay(transform.position, directionToPlayer * hit.distance, Color.red);
+                    Debug.DrawRay(transform.position, directionToTarget * hit.distance, Color.red);
 
                     // Obstacle detected, player not visible
                     if (hit.collider.CompareTag("Obstacle"))
                     {
-                        Debug.Log("Obstacle hit: " + hit.collider.gameObject.name);
                         return TaskStatus.FAILURE;
                     }
                     else
                     {
                         // Debug ray for no obstacle raycast
-                        Debug.DrawRay(transform.position, directionToPlayer * 500, Color.green);
-                        Guard.canSeePlayer = true;
-                        return TaskStatus.SUCCESS;
+                        Debug.DrawRay(transform.position, directionToTarget * 500, Color.green);
                     }
+
+                    // No obstacles in the way, player visible
+                    Guard.canSeePlayer = true;
+                    return TaskStatus.SUCCESS;
                 }
             }
-            // Player not within cone or not found
-            return TaskStatus.FAILURE;
         }
         // Player not within cone or not found
         return TaskStatus.FAILURE;
