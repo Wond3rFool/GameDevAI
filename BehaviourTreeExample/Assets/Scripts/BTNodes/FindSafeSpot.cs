@@ -31,9 +31,9 @@ public class FindSafeSpot : BTBaseNode
             {
                 // Set agent's destination to the closest spot
                 agent.SetDestination(closestSpot.position);
-                agent.speed = 6.0f;
+                agent.speed = 4.5f;
                 animator.Play("Run");
-                if(!agent.pathPending && agent.remainingDistance < 0.5f) 
+                if(!agent.pathPending && agent.remainingDistance < 1.5f) 
                 {
                     agent.SetDestination(transform.position);
                     return TaskStatus.SUCCESS;

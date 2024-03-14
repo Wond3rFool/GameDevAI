@@ -25,32 +25,24 @@ public class CheckForTarget : BTBaseNode
         if (targetTransform != null)
         {
             // Calculate direction to the player
-            Vector3 directionToTarget = (targetTransform.position - transform.position).normalized;
-
-            if (Vector3.Angle(transform.position, directionToTarget) < coneAngle / 2)
+            Vector3 directionToPlayer = targetTransform.position - transform.position;
+            // Check if the player is within the cone angle
+            if (Vector3.Angle(transform.forward, directionToPlayer) <= coneAngle * 0.5f)
             {
-                // Raycast to check for obstacles between NPC and player
+                
                 RaycastHit hit;
-                if (Physics.Raycast(transform.position, directionToTarget, out hit, 500, obstacleLayer))
+                if (Physics.Raycast(transform.position, directionToPlayer, out hit, 500, obstacleLayer))
                 {
-                    // Debug ray for obstacle raycast
-                    Debug.DrawRay(transform.position, directionToTarget * hit.distance, Color.red);
-
                     // Obstacle detected, player not visible
                     if (hit.collider.CompareTag("Obstacle"))
                     {
                         return TaskStatus.FAILURE;
                     }
-                    else
-                    {
-                        // Debug ray for no obstacle raycast
-                        Debug.DrawRay(transform.position, directionToTarget * 500, Color.green);
-                    }
-
-                    // No obstacles in the way, player visible
-                    Guard.canSeePlayer = true;
-                    return TaskStatus.SUCCESS;
                 }
+
+                // No obstacles in the way, player visible
+                Guard.canSeePlayer = true;
+                return TaskStatus.SUCCESS;
             }
         }
         // Player not within cone or not found

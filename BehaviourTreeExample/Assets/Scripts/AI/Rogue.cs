@@ -45,7 +45,7 @@ public class Rogue : Tree
             new Sequence(new List<BTBaseNode>
             {
                 new ConditionNode(() => foundSafeSpot),
-                new SavePlayer(transform, targetLayer),
+                new SavePlayer(transform),
                 new DisplayText(text, "Throwing Stone"),
                 new WaitFor(1.0f),
                 new StunTarget(transform, targetLayer),

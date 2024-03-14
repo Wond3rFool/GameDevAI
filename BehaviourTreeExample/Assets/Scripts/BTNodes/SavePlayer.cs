@@ -3,25 +3,16 @@ using UnityEngine.AI;
 public class SavePlayer : BTBaseNode
 {
     private Animator animator;
-    private NavMeshAgent agent;
 
-    private Transform transform;
-    private LayerMask target;
-
-    public SavePlayer(Transform transform, LayerMask target) 
+    public SavePlayer(Transform transform) 
     {
-        this.transform = transform;
-        this.target = target;
-
-        agent = transform.GetComponent<NavMeshAgent>();
         animator = transform.GetComponentInChildren<Animator>();
     }
     public override TaskStatus Evaluate(Blackboard blackboard)
     {
         animator.Play("Throw");
-        bool isPlaying = animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f;
-        if (isPlaying)
-        {
+        if(!(animator.GetCurrentAnimatorStateInfo(0).length < animator.GetCurrentAnimatorStateInfo(0).normalizedTime))
+        { 
             return TaskStatus.RUNNING;
         }
         return TaskStatus.SUCCESS;

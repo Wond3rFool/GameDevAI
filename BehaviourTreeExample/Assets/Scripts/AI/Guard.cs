@@ -34,10 +34,12 @@ public class Guard : Tree, IHear
                 new DisplayText(text, "Heard Player"),
                 new Parallel(new List<BTBaseNode>
                 {
-                    new Inverter(new SetDestination(transform, "SoundTarget")),
+                    new SetDestination(transform, "SoundTarget"),
                     new Inverter(new ConditionNode(() => isStunned)),
-                    new Inverter(new CheckForTarget(viewTransform, obstacleLayer, "Target", 100.0f)),
+                    new Inverter(new CheckForTarget(transform, obstacleLayer, "Target", 100.0f)),
                 }),
+                new PlayAnimation(transform, "Idle"),
+                new Inverter(new LookRandomly(transform, 2f)),
             }),
 
             new Selector(new List<BTBaseNode>
@@ -60,14 +62,13 @@ public class Guard : Tree, IHear
 
                 new Sequence(new List<BTBaseNode>
                 {
-                    new CheckForTarget(viewTransform, obstacleLayer, "Target", 100.0f),
+                    new CheckForTarget(transform, obstacleLayer, "Target", 100.0f),
                     new CheckTargetInRange(transform, 8, "Target", targetLayer),
                     new Inverter(new ConditionNode(() => hasWeapon)),
-                    new DisplayText(text, "saw player but no weapon"),
-                    new WaitFor(2.5f),
                     new DisplayText(text, "Finding weapon"),
                     new GrabWeapon(transform, weaponSpot),
                     new PlayAnimation(transform, "Crouch Idle"),
+                    new LookRandomly(transform, 2f),
                     new DisplayText(text, "Found a weapon"),
                     new WaitFor(1.5f),
                     new FunctionNode(() => hasWeapon = true)
@@ -76,11 +77,11 @@ public class Guard : Tree, IHear
                 new Sequence(new List<BTBaseNode>
                 {
                     new ConditionNode(() => hasWeapon),
-                    new CheckForTarget(viewTransform, obstacleLayer, "Target", 100.0f),
+                    new CheckForTarget(transform, obstacleLayer, "Target", 100.0f),
                     new Parallel(new List<BTBaseNode>
                     {
                         new Inverter(new ConditionNode(() => isStunned)),
-                        new CheckTargetInRange(transform, 16, "Target", targetLayer),
+                        new CheckTargetInRange(transform, 8, "Target", targetLayer),
                         new ToTarget(transform, text),
                         new CheckAttackRange(transform, attackRange, "Target", "Side Kick"),
                     }),
@@ -105,7 +106,7 @@ public class Guard : Tree, IHear
         }
     }
 
-    public void HasBeenStunned() 
+    public void StunGuard() 
     {
         isStunned = true;
     }
