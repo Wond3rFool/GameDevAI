@@ -10,6 +10,7 @@ public class Patrol : BTBaseNode
     private Animator animator;
     private NavMeshAgent agent;
     private Transform[] waypoints;
+    private Transform currentWaypoint;
     private TextMeshPro text;
     private int currentWaypointIndex = 0;
 
@@ -24,6 +25,8 @@ public class Patrol : BTBaseNode
         animator = transform.GetComponentInChildren<Animator>();
         agent = transform.GetComponent<NavMeshAgent>();
         waypoints = _waypoints; 
+        currentWaypoint = waypoints[currentWaypointIndex];
+        agent.SetDestination(currentWaypoint.position);
     }
 
     public override TaskStatus Evaluate(Blackboard blackboard)
@@ -34,28 +37,28 @@ public class Patrol : BTBaseNode
             animator.Play("Idle");
             text.text = "Waiting";
             Debug.Log(agent.transform.name + ": " + text.text);
-            if (waitCounter > waitTime) 
+            if (waitCounter > waitTime)
             {
                 waiting = false;
+                currentWaypointIndex = (currentWaypointIndex + 1) % waypoints.Length;
+                currentWaypoint = waypoints[currentWaypointIndex];
+                agent.SetDestination(currentWaypoint.position);
             }
             state = TaskStatus.SUCCESS;
             return state;
         }
-        else 
+        else
         {
-            Transform wp = waypoints[currentWaypointIndex];
-            if (Vector3.Distance(transform.position, wp.position) < 0.4f)
+            if (!agent.pathPending && agent.remainingDistance < 0.4f)
             {
                 waitCounter = 0f;
                 waiting = true;
-                currentWaypointIndex = (currentWaypointIndex + 1) % waypoints.Length;
                 state = TaskStatus.SUCCESS;
                 return state;
             }
-            else 
+            else
             {
                 animator.Play("Rifle Walk");
-                agent.SetDestination(wp.position);
                 text.text = "Patrolling";
                 Debug.Log(agent.transform.name + ": " + text.text);
                 state = TaskStatus.SUCCESS;

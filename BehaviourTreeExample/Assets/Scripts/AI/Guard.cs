@@ -49,7 +49,6 @@ public class Guard : Tree, IHear
                     new ConditionNode(() => isStunned),
                     new DisplayText(text, "Is Stunned"),
                     new PlayAnimation(transform, "Scared"),
-                    new WaitFor(4f),
                     new FunctionNode(() => isStunned = false),
                     new Inverter(new FunctionNode(() => canHearPlayer = false)),
 
@@ -68,9 +67,7 @@ public class Guard : Tree, IHear
                     new DisplayText(text, "Finding weapon"),
                     new GrabWeapon(transform, weaponSpot),
                     new PlayAnimation(transform, "Crouch Idle"),
-                    new LookRandomly(transform, 2f),
                     new DisplayText(text, "Found a weapon"),
-                    new WaitFor(1.5f),
                     new FunctionNode(() => hasWeapon = true)
                 }),
 

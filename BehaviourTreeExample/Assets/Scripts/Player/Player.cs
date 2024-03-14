@@ -8,7 +8,10 @@ public class Player : MonoBehaviour, IDamageable
     [SerializeField] private float moveSpeed = 3;
     [SerializeField] private float deathForce = 1000;
     [SerializeField] private GameObject ragdoll;
+    [SerializeField] private GameObject projectile;
+    [SerializeField] private Transform firePoint;
     private Rigidbody rb;
+    private float throwStrength = 140f;
     private Sound walking;
     private Sound sneaking;
     private Animator animator;
@@ -18,8 +21,6 @@ public class Player : MonoBehaviour, IDamageable
     private Collider mainCollider;
 
     public static bool beingAttacked;
-
-    public GameObject projectilePrefab;
 
     // Start is called before the first frame update
     private void Start()
@@ -87,10 +88,18 @@ public class Player : MonoBehaviour, IDamageable
             {
                 Sounds.MakeSound(walking);
             }
-            else 
+            else
             {
                 Sounds.MakeSound(sneaking);
             }
+        }
+
+        if (Input.GetKeyDown(KeyCode.Mouse0)) 
+        {
+            GameObject proPrefab = Instantiate(projectile, firePoint.position, Quaternion.identity);
+            Rigidbody proPrefabRB = proPrefab.GetComponent<Rigidbody>();
+
+            proPrefabRB.AddForce(CameraTransofrm.forward * throwStrength, ForceMode.Impulse);
         }
 
     }

@@ -9,6 +9,8 @@ public class PlayAnimation : BTBaseNode
     private Animator animator;
     private string animationName;
 
+    private bool animationStarted = false;
+
     public PlayAnimation(Transform transform, string animationName) 
     {
         agent = transform.GetComponent<NavMeshAgent>();
@@ -19,16 +21,22 @@ public class PlayAnimation : BTBaseNode
     public override TaskStatus Evaluate(Blackboard blackboard)
     {
         agent.SetDestination(agent.transform.position);
-        agent.isStopped = true;
-        animator.Play(animationName);
-        bool isPlaying = animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f;
 
-        if (isPlaying)
+        if (!animationStarted)
         {
+            animator.Play(animationName);
+            animationStarted = true;
             return TaskStatus.RUNNING;
         }
-        agent.isStopped = false;
-        return TaskStatus.SUCCESS;
+        else
+        {
+            if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
+            {
+                animationStarted = false;
+                return TaskStatus.SUCCESS;
+            }
+        }
+        return TaskStatus.RUNNING;
     }
 
 }
