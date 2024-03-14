@@ -23,7 +23,7 @@ public class ToTarget : BTBaseNode
 
         if (Vector3.Distance(transform.position, target.position) > 1.5f)
         {
-            animator.Play("Rifle Walk");
+            animator.Play("Run Forward");
             agent.SetDestination(target.position);
             text.text = "Player in sight";
             Player.beingAttacked = true;

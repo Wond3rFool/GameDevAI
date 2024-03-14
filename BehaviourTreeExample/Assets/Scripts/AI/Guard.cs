@@ -83,7 +83,7 @@ public class Guard : Tree, IHear
                         new Inverter(new ConditionNode(() => isStunned)),
                         new CheckTargetInRange(transform, 8, "Target", targetLayer),
                         new ToTarget(transform, text),
-                        new CheckAttackRange(transform, attackRange, "Target", "Side Kick"),
+                        new CheckAttackRange(transform, attackRange, "Target", "Kick"),
                     }),
                     new Attack(text),
                     new FunctionNode(() => canHearPlayer = false)

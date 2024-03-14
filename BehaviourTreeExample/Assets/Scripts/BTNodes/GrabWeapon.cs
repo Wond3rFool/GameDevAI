@@ -10,7 +10,7 @@ public class GrabWeapon : BTBaseNode
     private Transform target;
     private Animator animator;
     private NavMeshAgent agent;
-    private TextMeshPro text;
+
 
     public GrabWeapon(Transform _transform, Transform _target) 
     {
@@ -31,7 +31,7 @@ public class GrabWeapon : BTBaseNode
         }
         else
         {
-            animator.Play("Rifle Walk");
+            animator.Play("Run");
             agent.SetDestination(target.position);
             return TaskStatus.RUNNING;
         }

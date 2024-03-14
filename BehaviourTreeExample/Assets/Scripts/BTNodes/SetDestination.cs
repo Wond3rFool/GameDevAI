@@ -21,9 +21,10 @@ public class SetDestination : BTBaseNode
     public override TaskStatus Evaluate(Blackboard blackboard)
     {
         destination = blackboard.GetData<Vector3>(target);
+        agent.isStopped = false;
         agent.SetDestination(destination);
         animator.Play("Rifle Walk");
-        if (agent.remainingDistance < 1.5f) 
+        if (!agent.pathPending && agent.remainingDistance < 1.5f) 
         {
             return TaskStatus.SUCCESS;
         }
