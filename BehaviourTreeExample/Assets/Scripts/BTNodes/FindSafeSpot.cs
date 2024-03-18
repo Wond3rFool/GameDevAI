@@ -22,30 +22,25 @@ public class FindSafeSpot : BTBaseNode
 
     public override TaskStatus Evaluate(Blackboard blackboard)
     {
-        Transform closestSpot = FindClosestSpot();
+        Transform closestSpot = FindClosestReachableSpot();
 
         if (closestSpot != null)
         {
-            // Assuming your agent has a NavMeshAgent component
-            if (agent != null)
+            // Set agent's destination to the closest reachable spot
+            agent.SetDestination(closestSpot.position);
+            agent.speed = 4.5f;
+            animator.Play("Run");
+            if (!agent.pathPending && agent.remainingDistance < 1.5f)
             {
-                // Set agent's destination to the closest spot
-                agent.SetDestination(closestSpot.position);
-                agent.speed = 4.5f;
-                animator.Play("Run");
-                if(!agent.pathPending && agent.remainingDistance < 1.5f) 
-                {
-                    agent.SetDestination(transform.position);
-                    return TaskStatus.SUCCESS;
-                }
-                return TaskStatus.RUNNING;
+                agent.SetDestination(transform.position);
+                return TaskStatus.SUCCESS;
             }
+            return TaskStatus.RUNNING;
         }
-
         return TaskStatus.FAILURE;
     }
 
-    private Transform FindClosestSpot()
+    private Transform FindClosestReachableSpot()
     {
         Transform closestSpot = null;
         float closestDistance = float.MaxValue;
@@ -56,8 +51,18 @@ public class FindSafeSpot : BTBaseNode
 
             if (distance < closestDistance)
             {
-                closestDistance = distance;
-                closestSpot = spot;
+                NavMeshPath path = new NavMeshPath();
+                if (agent != null && agent.isOnNavMesh)
+                {
+                    if (agent.CalculatePath(spot.position, path))
+                    {
+                        if (path.status == NavMeshPathStatus.PathComplete)
+                        {
+                            closestDistance = distance;
+                            closestSpot = spot;
+                        }
+                    }
+                }
             }
         }
 

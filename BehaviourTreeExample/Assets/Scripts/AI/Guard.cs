@@ -17,9 +17,8 @@ public class Guard : Tree, IHear, IDamageable
     [SerializeField]
     private LayerMask obstacleLayer;
 
-    private bool isStunned;
-
     private float attackRange = 1.5f;
+    private bool isStunned;
     private bool hasWeapon;
     private bool canHearPlayer;
 
@@ -35,7 +34,7 @@ public class Guard : Tree, IHear, IDamageable
                 {
                     new SetDestination(transform, "SoundTarget"),
                     new Inverter(new ConditionNode(() => isStunned)),
-                    new Inverter(new CheckForTarget(transform, obstacleLayer, "Target", 100.0f)),
+                    new Inverter(new CheckForTarget(transform, obstacleLayer, "Target", 45.0f)),
                 }),
                 new PlayAnimation(transform, "Idle"),
                 new Inverter(new LookRandomly(transform, 2f)),
@@ -65,7 +64,7 @@ public class Guard : Tree, IHear, IDamageable
                     new Inverter(new ConditionNode(() => hasWeapon)),
                     new DisplayText(text, "Finding weapon"),
                     new GrabWeapon(transform, weaponSpot),
-                    new PlayAnimation(transform, "Crouch Idle"),
+                    new PlayAnimation(transform, "Side Kick"),
                     new DisplayText(text, "Found a weapon"),
                     new FunctionNode(() => hasWeapon = true)
                 }),
@@ -81,7 +80,7 @@ public class Guard : Tree, IHear, IDamageable
                         new ToTarget(transform, text),
                         new CheckAttackRange(transform, attackRange, "Target", "Kick"),
                     }),
-                    new Attack(text),
+                    new Attack(transform, text, "Target"),
                     new FunctionNode(() => canHearPlayer = false)
                 }),
             }),

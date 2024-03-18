@@ -1628,7 +1628,7 @@ PrefabInstance:
     - target: {fileID: 5626283539516023752, guid: 41cfaf523cb393e42b4c5052e7fdf564,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -12.17
+      value: -4.74
       objectReference: {fileID: 0}
     - target: {fileID: 5626283539516023752, guid: 41cfaf523cb393e42b4c5052e7fdf564,
         type: 3}
@@ -1638,7 +1638,7 @@ PrefabInstance:
     - target: {fileID: 5626283539516023752, guid: 41cfaf523cb393e42b4c5052e7fdf564,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -6
+      value: -0.23
       objectReference: {fileID: 0}
     - target: {fileID: 5626283539516023752, guid: 41cfaf523cb393e42b4c5052e7fdf564,
         type: 3}
@@ -1704,6 +1704,11 @@ PrefabInstance:
         type: 3}
       propertyPath: waypoints.Array.data[3]
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5626283539516023755, guid: 41cfaf523cb393e42b4c5052e7fdf564,
+        type: 3}
+      propertyPath: angle
+      value: 45
       objectReference: {fileID: 0}
     - target: {fileID: 5626283539516023755, guid: 41cfaf523cb393e42b4c5052e7fdf564,
         type: 3}
