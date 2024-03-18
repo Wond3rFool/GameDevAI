@@ -22,23 +22,18 @@ public class CheckForTarget : BTBaseNode
 
         if (targetTransform != null)
         {
-            Vector3 directionToPlayer = targetTransform.position - transform.position;
-            if (Vector3.Angle(transform.forward, directionToPlayer) <= coneAngle * 0.5f)
+            Vector3 directionToTarget = (targetTransform.position - transform.position).normalized;
+
+            if (Vector3.Angle(transform.forward, directionToTarget) < coneAngle / 2)
             {
                 // Draw the debug ray
-                Debug.DrawRay(transform.position, directionToPlayer, Color.green);
+                Debug.DrawRay(transform.position, directionToTarget, Color.green);
+                float distanceToTarget = Vector3.Distance(transform.position, targetTransform.position);
 
-                RaycastHit hit;
-                if (Physics.Raycast(transform.position, directionToPlayer, out hit, 500, obstacleLayer))
+                if (Physics.Raycast(transform.position, directionToTarget, distanceToTarget, obstacleLayer))
                 {
-                    // Obstacle detected, player not visible
-                    if (hit.collider.CompareTag("Obstacle"))
-                    {
-                        return TaskStatus.FAILURE;
-                    }
+                    return TaskStatus.FAILURE;
                 }
-                // No obstacles in the way, player visible
-                Guard.canSeePlayer = true;
                 return TaskStatus.SUCCESS;
             }
         }

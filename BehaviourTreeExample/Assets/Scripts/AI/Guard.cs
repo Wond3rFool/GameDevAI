@@ -2,7 +2,7 @@
 using TMPro;
 using UnityEngine;
 
-public class Guard : Tree, IHear
+public class Guard : Tree, IHear, IDamageable
 {
     [SerializeField]
     private Transform[] waypoints;
@@ -17,8 +17,7 @@ public class Guard : Tree, IHear
     [SerializeField]
     private LayerMask obstacleLayer;
 
-    public static bool isStunned;
-    public static bool canSeePlayer;
+    private bool isStunned;
 
     private float attackRange = 1.5f;
     private bool hasWeapon;
@@ -102,8 +101,9 @@ public class Guard : Tree, IHear
             canHearPlayer = false;
         }
     }
+    public void TakeDamage(GameObject attacker, int damage){}
 
-    public void StunGuard() 
+    public void BeStunned()
     {
         isStunned = true;
     }

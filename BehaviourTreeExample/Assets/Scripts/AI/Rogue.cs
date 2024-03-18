@@ -46,9 +46,10 @@ public class Rogue : Tree
             {
                 new ConditionNode(() => foundSafeSpot),
                 new SavePlayer(transform),
+                new CheckTargetInRange(transform, 500, "Target", targetLayer),
                 new DisplayText(text, "Throwing Stone"),
                 new WaitFor(1.0f),
-                new StunTarget(transform, targetLayer),
+                new StunTarget(transform, targetLayer, "Target"),
                 new FunctionNode(() => Player.beingAttacked = false),
                 new Inverter(new FunctionNode(() => foundSafeSpot = false))
 

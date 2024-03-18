@@ -146,4 +146,8 @@ public class Player : MonoBehaviour, IDamageable
             animator.CrossFade(animationName, fadeTime);
         }
     }
+
+    public void BeStunned()
+    {
+    }
 }
