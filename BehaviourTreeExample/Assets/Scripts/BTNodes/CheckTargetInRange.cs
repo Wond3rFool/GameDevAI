@@ -41,7 +41,7 @@ public class CheckTargetInRange : BTBaseNode
             Transform target = (Transform)targetObject;
             if (Vector3.Distance(transform.position, target.position) > range)
             {
-                Player.beingAttacked = false;
+                target.GetComponent<Player>().SetBeingAttacked(false);
                 return TaskStatus.FAILURE;
             }
             else 

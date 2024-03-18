@@ -6,26 +6,25 @@ public class Rogue : Tree
 {
     [SerializeField]
     private Transform[] safeSpots;
-
     [SerializeField]
     private float followDistance;
-
     [SerializeField]
     private float detectDistance;
-
     [SerializeField]
     private LayerMask targetLayer;
     [SerializeField]
     private LayerMask friendLayer;
-
     [SerializeField]
     private TextMeshPro text;
 
     private bool foundSafeSpot;
 
-    protected override void Awake()
+    private Player player;
+    protected override void Start()
     {
-        base.Awake();
+        GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
+        player = playerObject.GetComponent<Player>();
+        base.Start(); 
     }
 
     protected override BTBaseNode SetupTree()
@@ -35,7 +34,7 @@ public class Rogue : Tree
             new Inverter(new CheckTargetInRange(transform, detectDistance, "Friend", friendLayer)),
 
             new Sequence(new List<BTBaseNode>{ 
-                new isPlayerThreatened(),
+                new isPlayerThreatened(player.gameObject),
                 new DisplayText(text, "Finding hiding spot"),
                 new FindSafeSpot(transform, safeSpots),
                 new DisplayText(text, "In Hiding"),
@@ -50,7 +49,7 @@ public class Rogue : Tree
                 new DisplayText(text, "Throwing Stone"),
                 new WaitFor(1.0f),
                 new StunTarget(transform, targetLayer, "Target"),
-                new FunctionNode(() => Player.beingAttacked = false),
+                new FunctionNode(() => player.SetBeingAttacked(false)),
                 new Inverter(new FunctionNode(() => foundSafeSpot = false))
 
             }),

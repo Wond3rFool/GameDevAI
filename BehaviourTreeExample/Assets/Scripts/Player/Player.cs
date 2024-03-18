@@ -4,23 +4,32 @@ using UnityEngine;
 public class Player : MonoBehaviour, IDamageable
 {
     public Transform CameraTransofrm;
-    [SerializeField] private float rotationSpeed = 180f;
-    [SerializeField] private float moveSpeed = 3;
-    [SerializeField] private float deathForce = 1000;
-    [SerializeField] private GameObject ragdoll;
-    [SerializeField] private GameObject projectile;
-    [SerializeField] private Transform firePoint;
+    [SerializeField] 
+    private float rotationSpeed = 180f;
+    [SerializeField] 
+    private float moveSpeed = 3;
+    [SerializeField] 
+    private float deathForce = 1000;
+    [SerializeField] 
+    private GameObject ragdoll;
+    [SerializeField] 
+    private GameObject projectile;
+    [SerializeField] 
+    private Transform firePoint;
+
+    private Vector3 moveDirection;
+    
+    private Animator animator;
+    private Collider mainCollider;
     private Rigidbody rb;
-    private float throwStrength = 140f;
     private Sound walking;
     private Sound sneaking;
-    private Animator animator;
+    
+    private float throwStrength = 140f;
     private float vert = 0;
     private float hor = 0;
-    private Vector3 moveDirection;
-    private Collider mainCollider;
 
-    public static bool beingAttacked;
+    private bool beingAttacked;
 
     // Start is called before the first frame update
     private void Start()
@@ -94,7 +103,7 @@ public class Player : MonoBehaviour, IDamageable
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.Mouse0)) 
+        if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             GameObject proPrefab = Instantiate(projectile, firePoint.position, Quaternion.identity);
             Rigidbody proPrefabRB = proPrefab.GetComponent<Rigidbody>();
@@ -149,5 +158,15 @@ public class Player : MonoBehaviour, IDamageable
 
     public void BeStunned()
     {
+    }
+
+    public bool IsBeingAttacked()
+    {
+        return beingAttacked;
+    }
+
+    public void SetBeingAttacked(bool value)
+    {
+        beingAttacked = value;
     }
 }

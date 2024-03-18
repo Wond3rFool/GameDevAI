@@ -17,10 +17,19 @@ public class Guard : Tree, IHear, IDamageable
     [SerializeField]
     private LayerMask obstacleLayer;
 
+    private Player player;
+
     private float attackRange = 1.5f;
     private bool isStunned;
     private bool hasWeapon;
     private bool canHearPlayer;
+
+    protected override void Start()
+    {
+        GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
+        player = playerObject.GetComponent<Player>();
+        base.Start();
+    }
 
     protected override BTBaseNode SetupTree()
     {
@@ -37,7 +46,7 @@ public class Guard : Tree, IHear, IDamageable
                     new Inverter(new CheckForTarget(transform, obstacleLayer, "Target", 45.0f)),
                 }),
                 new PlayAnimation(transform, "Idle"),
-                new Inverter(new LookRandomly(transform, 2f)),
+                new Inverter(new LookRandomly(transform, 0.5f)),
             }),
 
             new Selector(new List<BTBaseNode>
@@ -76,6 +85,7 @@ public class Guard : Tree, IHear, IDamageable
                     new Parallel(new List<BTBaseNode>
                     {
                         new Inverter(new ConditionNode(() => isStunned)),
+                        new FunctionNode(() => player.SetBeingAttacked(true)),
                         new CheckTargetInRange(transform, 8, "Target", targetLayer),
                         new ToTarget(transform, text),
                         new CheckAttackRange(transform, attackRange, "Target", "Kick"),

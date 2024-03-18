@@ -13,7 +13,7 @@ public abstract class Tree : MonoBehaviour
     {
         blackboard = new Blackboard();
     }
-    protected void Start()
+    protected virtual void Start()
     {
         root = SetupTree();
     }

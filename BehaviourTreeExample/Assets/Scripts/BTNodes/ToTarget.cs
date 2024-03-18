@@ -26,7 +26,6 @@ public class ToTarget : BTBaseNode
             animator.Play("Run Forward");
             agent.SetDestination(target.position);
             text.text = "Player in sight";
-            Player.beingAttacked = true;
             Debug.Log(text.text);
             return TaskStatus.RUNNING;
         }

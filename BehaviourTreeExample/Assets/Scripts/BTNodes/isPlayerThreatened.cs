@@ -4,11 +4,17 @@ using UnityEngine;
 
 public class isPlayerThreatened : BTBaseNode
 {
+    private GameObject gameObject;
 
+    public isPlayerThreatened(GameObject gameObject) 
+    {
+        this.gameObject = gameObject;
+    }
 
     public override TaskStatus Evaluate(Blackboard blackboard)
     {
-        if (Player.beingAttacked) 
+
+        if (gameObject.GetComponent<Player>().IsBeingAttacked()) 
         {
             return TaskStatus.SUCCESS;
         }
