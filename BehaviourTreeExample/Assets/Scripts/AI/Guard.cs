@@ -56,7 +56,7 @@ public class Guard : Tree, IHear
                 new Sequence(new List<BTBaseNode>
                 {
                     new Inverter(new CheckTargetInRange(transform, 1000, "Target", targetLayer)),
-                    new Patrol(transform, waypoints, text)
+                    new Patrol(transform, text)
                 }),
 
                 new Sequence(new List<BTBaseNode>
@@ -86,7 +86,7 @@ public class Guard : Tree, IHear
                     new FunctionNode(() => canHearPlayer = false)
                 }),
             }),
-            new Patrol(transform, waypoints, text)
+            new Patrol(transform, text)
         });
     }
 

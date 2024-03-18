@@ -1,6 +1,4 @@
-using System.Collections;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class CheckForTarget : BTBaseNode
 {
@@ -24,12 +22,12 @@ public class CheckForTarget : BTBaseNode
 
         if (targetTransform != null)
         {
-            // Calculate direction to the player
             Vector3 directionToPlayer = targetTransform.position - transform.position;
-            // Check if the player is within the cone angle
             if (Vector3.Angle(transform.forward, directionToPlayer) <= coneAngle * 0.5f)
             {
-                
+                // Draw the debug ray
+                Debug.DrawRay(transform.position, directionToPlayer, Color.green);
+
                 RaycastHit hit;
                 if (Physics.Raycast(transform.position, directionToPlayer, out hit, 500, obstacleLayer))
                 {
@@ -39,7 +37,6 @@ public class CheckForTarget : BTBaseNode
                         return TaskStatus.FAILURE;
                     }
                 }
-
                 // No obstacles in the way, player visible
                 Guard.canSeePlayer = true;
                 return TaskStatus.SUCCESS;
