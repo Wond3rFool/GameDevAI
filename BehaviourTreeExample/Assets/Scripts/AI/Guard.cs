@@ -17,6 +17,8 @@ public class Guard : Tree, IHear, IDamageable
     [SerializeField]
     private LayerMask obstacleLayer;
 
+    private FieldOfView fov;
+
     private Player player;
 
     private float attackRange = 1.5f;
@@ -24,6 +26,11 @@ public class Guard : Tree, IHear, IDamageable
     private bool hasWeapon;
     private bool canHearPlayer;
 
+    protected override void Awake()
+    {
+        base.Awake();
+        fov = GetComponent<FieldOfView>();
+    }
     protected override void Start()
     {
         GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
@@ -43,7 +50,7 @@ public class Guard : Tree, IHear, IDamageable
                 {
                     new SetDestination(transform, "SoundTarget"),
                     new Inverter(new ConditionNode(() => isStunned)),
-                    new Inverter(new CheckForTarget(transform, obstacleLayer, "Target", 45.0f)),
+                    new Inverter(new CheckForTarget(transform, obstacleLayer, "Target", fov.angle)),
                 }),
                 new PlayAnimation(transform, "Idle"),
                 new Inverter(new LookRandomly(transform, 0.5f)),
@@ -68,8 +75,8 @@ public class Guard : Tree, IHear, IDamageable
 
                 new Sequence(new List<BTBaseNode>
                 {
-                    new CheckForTarget(transform, obstacleLayer, "Target", 100.0f),
-                    new CheckTargetInRange(transform, 8, "Target", targetLayer),
+                    new CheckForTarget(transform, obstacleLayer, "Target", fov.angle),
+                    new CheckTargetInRange(transform, fov.radius, "Target", targetLayer),
                     new Inverter(new ConditionNode(() => hasWeapon)),
                     new DisplayText(text, "Finding weapon"),
                     new GrabWeapon(transform, weaponSpot),
@@ -81,12 +88,12 @@ public class Guard : Tree, IHear, IDamageable
                 new Sequence(new List<BTBaseNode>
                 {
                     new ConditionNode(() => hasWeapon),
-                    new CheckForTarget(transform, obstacleLayer, "Target", 100.0f),
+                    new CheckForTarget(transform, obstacleLayer, "Target", fov.angle),
                     new Parallel(new List<BTBaseNode>
                     {
                         new Inverter(new ConditionNode(() => isStunned)),
                         new FunctionNode(() => player.SetBeingAttacked(true)),
-                        new CheckTargetInRange(transform, 8, "Target", targetLayer),
+                        new CheckTargetInRange(transform, fov.radius, "Target", targetLayer),
                         new ToTarget(transform, text),
                         new CheckAttackRange(transform, attackRange, "Target", "Kick"),
                     }),

@@ -156,9 +156,7 @@ public class Player : MonoBehaviour, IDamageable
         }
     }
 
-    public void BeStunned()
-    {
-    }
+    public void BeStunned(){}
 
     public bool IsBeingAttacked()
     {
